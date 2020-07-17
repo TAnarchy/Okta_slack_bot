@@ -25,9 +25,8 @@ app.event('app_home_opened', ({ event, say }) => {
 });
 
 
-app.message('message test', ({ event, say }) => {  
-  // Look up the user from DB
- say(`Back at you <@${event}>!`);
+app.message('knock knock', async ({ message, say }) => {
+  say(`Back at ya ${message.text}`);
 });
 
 
