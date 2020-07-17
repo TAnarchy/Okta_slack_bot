@@ -25,6 +25,12 @@ app.event('app_home_opened', ({ event, say }) => {
 });
 
 
+app.event('message test', ({ event, say }) => {  
+  // Look up the user from DB
+ say(`Back at you <@${event.message}>!`);
+});
+
+
 // Start your app
 (async () => {
   await app.start(process.env.PORT || 3000);
