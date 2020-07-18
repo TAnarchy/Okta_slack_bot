@@ -16,14 +16,12 @@ exports.getUsers = () => {
   var toReturn=""
     okta_client.getUser('otykmxcq6cniUHjZ74x6')
 .then(user => {
-  toReturn=toReturn+JSON.Stringify(user)
+  toReturn=toReturn+JSON.Stringify(user.currentItems)
 });
     toReturn = toReturn =" INBETWEEN "
     var users=okta_client.listUsers()
-    users.each(user => {
-      toReturn=toReturn+" "+user
-    })
-    return toReturn
+ 
+    return JSON.stringify(users)
   }
   catch(e){
     return e
