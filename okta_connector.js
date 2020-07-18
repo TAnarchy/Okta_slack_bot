@@ -4,32 +4,40 @@ const okta_token=process.env.OKTA_TOKEN
 const okta_path=process.env.OKTA_PATH
 const okta = require('@okta/okta-sdk-nodejs');
 const req = require('sync-request');
-
+var returnValue="";
 
 
 exports.getUsers = () => {
 
-  
-  var userRes=req("GET",okta_url+okta_path,{
-    headers :{
-      'Authorization':'SSWS 00O5uxkxKYooyJEJZMgqDaahNdCaFK15AQi7ZqZ9Pp'
-    }
-  })
-  
-  var userResponse=JSON.parse(userRes.getBody("utf-8"))
-  var returnValue="";
-  if (userResponse.errorSummary!=undefined)
+  try{
+    var userRes=req("GET",okta_url+okta_path,{
+      headers :{
+        'Authorization':'SSWS 00O5uxkxKYooyJEJZMgqDaahNdCaFK15AQi7ZqZ9Pp'
+      }
+    })
+    var userResponse=JSON.parse(userRes.getBody("utf-8"))
+    returnValue="";
+    if (userResponse.errorSummary!=undefined)
     {
       returnValue=userResponse.errorSummary
     }
-  else
+    else
     {
-      
+      userResponse.map(function(val,index){
+        returnValue=returnValue+val.profile.firstName+" "+val.profile.email+"\n"
+      })
     }
-  return returnValue
-  return JSON.parse(userRes.getBody("utf-8"))[0].profile.firstName
+    return returnValue
+  } catch (e)
+  {
+    return e
+  }
+  //return JSON.parse(userRes.getBody("utf-8"))
   
-  
+}
+
+parseUsers = (val) => {
+  returnValue=returnValue+val.profile.firstName+" "+val.profile.email+"\n" 
 }
 
 

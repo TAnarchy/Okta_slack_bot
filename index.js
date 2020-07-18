@@ -32,7 +32,7 @@ app.message('knock knock', async ({ message, say }) => {
 
 app.message('list', async ({ message, say }) => {
   var userList = okta_connect.getUsers()
-  say(`List is ${userList}`);
+  say(`${userList}`);
 });
 
 // Start your app
