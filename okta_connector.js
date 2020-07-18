@@ -34,6 +34,7 @@ exports.createUser=(auth,params,back_channel) =>{
   try{
   let user_profile=exports.generate_profile(params.trim())
   slack_call.postMessageTestWithText("User Profile "+JSON.stringify(user_profile),"D017PG3NAKT")
+  console.log("User Profile "+JSON.stringify(user_profile))
   /* let user_profile={
   "profile": {
     "firstName": "Bowling",
@@ -78,6 +79,10 @@ exports.generate_profile=(kvp_string)=>{
   let result={}
   result.profile={}
   table.forEach(([key,value]) => result.profile[key] = value);
+  var alteredValue=result.profile.email.split("|")[0]
+  alteredValue.replace("<","")
+  result.profile.email=alteredValue
+  result.profile.login=alteredValue
   return result;
 }
 
