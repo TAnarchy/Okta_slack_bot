@@ -20,7 +20,7 @@ exports.getUsers = () => {
   toReturn=toReturn+" "+user
 })
     
-    return Object.prototype.toString.call(users);
+    return JSON.stringify(users)
   }
   catch(e){
     return e
