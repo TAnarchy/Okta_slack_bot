@@ -1,4 +1,5 @@
 const https = require('https');
+const store = require('./store');
 const okta_url=process.env.OKTA_URL
 const okta_token=process.env.OKTA_TOKEN
 const okta_path=process.env.OKTA_PATH
@@ -7,12 +8,12 @@ const req = require('sync-request');
 var returnValue="";
 
 
-exports.getUsers = () => {
+exports.getUsers = (auth) => {
 
   try{
     var userRes=req("GET",okta_url+okta_path,{
       headers :{
-        'Authorization':'SSWS 00O5uxkxKYooyJEJZMgqDaahNdCaFK15AQi7ZqZ9Pp'
+        'Authorization':auth
       }
     })
     var userResponse=JSON.parse(userRes.getBody("utf-8"))

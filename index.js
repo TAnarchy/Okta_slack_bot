@@ -29,14 +29,14 @@ app.message('list', async ({ message, say }) => {
    }
   else
     {
-      var userList = okta_connect.getUsers()
+      var userList = okta_connect.getUsers(store.getOktaToken())
       say(`${userList}`);
     }
 });
 
 app.message('token', async ({ message, say }) => {
-  store.setOktaToken(message.text)
-  say(`Okta Token set successfully`) 
+  store.setOktaToken("SSWS "+message.text.split('=')[1])
+  say(`Okta Token set successfully to: ${store.getOktaToken()}`) 
 });
 
 
