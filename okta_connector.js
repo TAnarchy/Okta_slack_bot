@@ -35,7 +35,9 @@ exports.createUser=(auth,params,back_channel) =>{
 }
 
 exports.generate_profile=(kvp_string)=>{
-  var table = kvp_string.split(" ").shift().map(pair => pair.split("="))
+  var arr=kvp_string.split(" ")
+  arr.shift()
+  var table = arr.map(pair => pair.split("="))
   var result={}
   table.forEach(([key,value]) => result[key] = value);
   return result;
