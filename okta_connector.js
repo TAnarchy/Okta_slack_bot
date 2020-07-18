@@ -51,7 +51,7 @@ exports.getUsers =(auth,back_channel) =>{
       headers :{
         'Authorization':auth
       }
-    }).done((res)=>{exports.parseResponse(res)})
+    }).done((res)=>{exports.parseResponse(res,back_channel)})
   } catch (e)
   {
     return e
