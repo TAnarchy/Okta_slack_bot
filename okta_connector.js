@@ -13,20 +13,23 @@ exports.getUsers = () => {
   headers:headers
 };
   
-  
+  var blank=""
 var req = https.request(options, function(res) {
   console.log("statusCode: ", res.statusCode);
   console.log("headers: ", res.headers);
-
+ 
   res.on('data', function(d) {
+    blank="not"
     return "Success"
   });
 });
 req.end();
 
 req.on('error', function(e) {
+  blank="not"
   return "failure"
 });
-  
+ 
+  while(blank=""){}
   
 }
