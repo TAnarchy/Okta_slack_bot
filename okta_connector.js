@@ -46,18 +46,22 @@ exports.goBackTest =() => {
 }
 
 exports.getUsers =(auth,back_channel) =>{
-  
-  
   try{
-    
-  
     then_request("GET",okta_url+okta_path,{
       headers :{
         'Authorization':auth
       }
-    }).done((res)=>{slack_call.postMessageTestWithText(res)})
+    }).done((res)=>{exports.parseResponse(res)})
   } catch (e)
   {
     return e
   }
+}
+
+exports.parseResponse=(response)=>
+{
+  var utf8_response=response.getBody("utf-8")
+  
+  
+  
 }
