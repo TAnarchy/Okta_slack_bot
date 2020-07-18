@@ -39,6 +39,23 @@ app.message('token', async ({ message, say }) => {
   say(`Okta Token set successfully to: ${store.getOktaToken()}`) 
 });
 
+app.message('special', async ({ message, say }) => {
+  say(`user is: ${message.user} and channel is: ${message.channel}`)
+});
+
+exports.postMessageTest = () =>{
+  try{
+     const result = app.client.chat.postMessage({
+      token: store.getOktaToken(),
+      channel: 'D017PG3NAKT',
+      text: `Post back successful`
+     })
+     }
+  catch(e){
+    
+  }
+}
+
 
 
 // Start your app
