@@ -30,8 +30,6 @@ app.message('list', async ({ message, say }) => {
    }
   else
     {
-    /*  var userList = okta_connect.getUsers_sync(store.getOktaToken())
-      say(`${userList}`);*/
       var userList = okta_connect.getUsers(store.getOktaToken(),message.channel)
     }
 });
