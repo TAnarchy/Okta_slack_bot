@@ -8,22 +8,7 @@ const req = require('sync-request');
 
 
 exports.getUsers = () => {
-  /*try{
-    const okta_client = new okta.Client({
-      orgUrl: "https://moveworkseddie-admin.okta.com",
-      token: "00O5uxkxKYooyJEJZMgqDaahNdCaFK15AQi7ZqZ9Pp"    // Obtained from Developer Dashboard
-    });
-    console.log("cat debugger")
-    debugger
-  
-    var toReturn=""
-    var users=okta_client.listUsers()
- 
-    return users
-  }
-  catch(e){
-    return e
-  }*/
+
   
   var userRes=req("GET",okta_url+okta_path,{
     headers :{
@@ -31,7 +16,9 @@ exports.getUsers = () => {
     }
   })
   
-  return userRes.getBody("utf-8")
+  return JSON.parse(userRes.getBody("utf-8"))[0].profile.firstName
+  
+  
 }
 
 
