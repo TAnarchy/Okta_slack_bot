@@ -16,6 +16,17 @@ exports.getUsers = () => {
     }
   })
   
+  var userResponse=JSON.parse(userRes.getBody("utf-8"))
+  var returnValue="";
+  if (userResponse.errorSummary!=undefined)
+    {
+      returnValue=userResponse.errorSummary
+    }
+  else
+    {
+      
+    }
+  return returnValue
   return JSON.parse(userRes.getBody("utf-8"))[0].profile.firstName
   
   
