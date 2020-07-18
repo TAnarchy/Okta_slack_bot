@@ -30,9 +30,10 @@ exports.getUsers =(auth,back_channel) =>{
 }
 
 exports.createUser=(auth,params,back_channel) =>{
-  slack_call.postMessageTestWithText("Auth: "+auth+" parmas "+params+" backchannel "+back_channel,back_channel)
+  
   try{
   let user_profile=exports.generate_profile(params.trim())
+  
   /* let user_profile={
   "profile": {
     "firstName": "Bowling",
@@ -59,6 +60,7 @@ exports.createUser=(auth,params,back_channel) =>{
 }
 
 exports.generate_profile=(kvp_string)=>{
+  slack_call.postMessageTestWithText(kvp_string.length,"D017PG3NAKT")
   let arr=kvp_string.split(" ")
   arr.shift()
   arr.push("login="+arr[0])
