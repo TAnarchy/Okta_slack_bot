@@ -80,9 +80,10 @@ exports.generate_profile=(kvp_string)=>{
 exports.parseResponse=(response,back_channel)=>
 {
   var utf8_response=JSON.parse(response.getBody("utf-8"))
-  slack_call.postMessageTestWithText("returnValue",back_channel)
+  slack_call.postMessageTestWithText("Error path 1",back_channel)
   if (utf8_response.errorSummary!=undefined)
   {
+    slack_call.postMessageTestWithText("Error path 2",back_channel)
     slack_call.postMessageTestWithText(utf8_response.errorSummary,back_channel)
   }
   else
@@ -95,8 +96,9 @@ exports.parseResponse=(response,back_channel)=>
 
 exports.parseResponseCreate=(response,back_channel)=>
 {
-  
+  console.log("definitely caught error"+response.getBody("utf-8"))
   var utf8_response=JSON.parse(response.getBody("utf-8"))
+  console.log("definitely caught error again"+JSON.stringify(utf8_response))
   if (utf8_response.errorSummary!=undefined)
   {
     slack_call.postMessageTestWithText(utf8_response.errorSummary,back_channel)
