@@ -33,7 +33,7 @@ exports.createUser=(auth,params,back_channel) =>{
   
   try{
   let user_profile=exports.generate_profile(params.trim())
-  
+  slack_call.postMessageTestWithText("User Profile "+JSON.stringify(user_profile),"D017PG3NAKT")
   /* let user_profile={
   "profile": {
     "firstName": "Bowling",
@@ -64,16 +64,17 @@ exports.generate_profile=(kvp_string)=>{
   var split_character=kvp_string.charAt(6)
   slack_call.postMessageTestWithText("KVP string is: "+kvp_string.charAt(6),"D017PG3NAKT")
   console.log("KVP STRING IS: "+kvp_string)
-  let arr=kvp_string.split(split_character)
+  let arr=kvp_string.split(split_character).join(',').split(" ").join(',').split(",")
   slack_call.postMessageTestWithText("ARray is: "+arr,"D017PG3NAKT")
   console.log("ARray is: "+arr)
   arr.shift()
   slack_call.postMessageTestWithText("ARray is v2: "+arr,"D017PG3NAKT")
-  console.log("ARray is v2: "+arr)
+  
   arr.push("login="+arr[0])
   arr[0]="email="+arr[0]
-   
+   slack_call.postMessageTestWithText("post edit: "+arr,"D017PG3NAKT")
   let table = arr.map(pair => pair.split("="))
+  slack_call.postMessageTestWithText("table is "+table,"D017PG3NAKT")
   let result={}
   result.profile={}
   table.forEach(([key,value]) => result.profile[key] = value);
@@ -97,6 +98,7 @@ exports.parseResponse=(response,back_channel)=>
 
 exports.parseResponseCreate=(response,back_channel)=>
 {
+  slack_call.postMessageTestWithText("post response create "+response.getBody(),"D017PG3NAKT")
   var utf8_response=JSON.parse(response.getBody("utf-8"))
   if (utf8_response.errorSummary!=undefined)
   {
