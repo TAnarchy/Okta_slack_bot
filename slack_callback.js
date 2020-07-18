@@ -17,3 +17,16 @@ try{
     console.log(e)
   }
 }
+
+exports.postMessageTestWithText= async (text)=>{
+try{
+     const result = await app.client.chat.postMessage({
+      token: bot_token,
+      channel: 'D017PG3NAKT',
+      text: text
+     })
+     }
+  catch(e){
+    console.log(e)
+  }
+}

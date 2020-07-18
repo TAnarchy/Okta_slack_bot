@@ -13,6 +13,7 @@
   "dependencies": {
     "@okta/okta-sdk-nodejs": "^4.0.0",
     "@slack/bolt": "^1.5.0",
-    "sync-request": "^6.1.0"
+    "sync-request": "^6.1.0",
+    "then-request": "^6.0.2"
   }
 }

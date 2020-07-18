@@ -5,11 +5,12 @@ const okta_token=process.env.OKTA_TOKEN
 const okta_path=process.env.OKTA_PATH
 const okta = require('@okta/okta-sdk-nodejs');
 const req = require('sync-request');
+const then_request=require('then-request')
 const slack_call = require('./slack_callback')
 var returnValue="";
 
 
-exports.getUsers = (auth) => {
+exports.getUsers_sync = (auth) => {
 
   try{
     var userRes=req("GET",okta_url+okta_path,{
@@ -44,3 +45,19 @@ exports.goBackTest =() => {
   slack_call.postMessageTest()
 }
 
+exports.getUsers =(auth) =>{
+  
+  
+  try{
+    
+  
+    then_request("GET",okta_url+okta_path,{
+      headers :{
+        'Authorization':auth
+      }
+    }).done((res)=>{slack_call.postMessageTestWithText("Success back and back")})
+  } catch (e)
+  {
+    return e
+  }
+}
