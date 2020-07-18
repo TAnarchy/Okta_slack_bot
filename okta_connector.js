@@ -31,9 +31,9 @@ exports.getUsers =(auth,back_channel) =>{
 
 exports.createUser=(auth,params,back_channel) =>{
     //slack_call.postMessageTestWithText("params are: "+params,back_channel)
-  var user_profile=exports.generate_profile(params)
-  slack_call.postMessageTestWithText("params post process: "+JSON.Stringify(user_profile),back_channel)
-    try{
+  let user_profile=exports.generate_profile(params,back_channel)
+  try{ 
+    
     then_request("POST",okta_url+okta_path+"?activate=false",{
       headers :{
         'Authorization':auth
@@ -44,18 +44,18 @@ exports.createUser=(auth,params,back_channel) =>{
     }).done((res)=>{exports.parseResponse(res,back_channel)})
   } catch (e)
   {
-    slack_call.postMessageTestWithText(e,back_channel)
+    slack_call.postMessageTestWithText(JSON.stringify(e),back_channel)
   }
   
 }
 
 exports.generate_profile=(kvp_string)=>{
-  var arr=kvp_string.split(" ")
+  let arr=kvp_string.split(" ")
   arr.shift()
   arr.push("login="+arr[0])
   arr[0]="email="+arr[0]
-  var table = arr.map(pair => pair.split("="))
-  var result={}
+  let table = arr.map(pair => pair.split("="))
+  let result={}
   result.profile={}
   table.forEach(([key,value]) => result.profile[key] = value);
   return result;
