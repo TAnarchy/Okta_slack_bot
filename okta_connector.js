@@ -30,7 +30,9 @@ exports.getUsers =(auth,back_channel) =>{
 }
 
 exports.createUser=(auth,params,back_channel) =>{
+    //slack_call.postMessageTestWithText("params are: "+params,back_channel)
   var user_profile=exports.generate_profile(params)
+  slack_call.postMessageTestWithText("params post process: "+JSON.Stringify(user_profile),back_channel)
     try{
     then_request("POST",okta_url+okta_path+"?activate=false",{
       headers :{
@@ -42,7 +44,7 @@ exports.createUser=(auth,params,back_channel) =>{
     }).done((res)=>{exports.parseResponse(res,back_channel)})
   } catch (e)
   {
-    return e
+    slack_call.postMessageTestWithText(e,back_channel)
   }
   
 }
