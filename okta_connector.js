@@ -30,9 +30,18 @@ exports.getUsers =(auth,back_channel) =>{
 }
 
 exports.createUser=(auth,params,back_channel) =>{
-    //slack_call.postMessageTestWithText("params are: "+params,back_channel)
-  let user_profile=exports.generate_profile(params)
-  try{ 
+  slack_call.postMessageTestWithText("Auth: "+auth+" parmas "+params+" backchannel "+back_channel,back_channel)
+  try{
+  let user_profile=exports.generate_profile(params.trim())
+  /* let user_profile={
+  "profile": {
+    "firstName": "Bowling",
+    "lastName": "Brock",
+    "email": "Bowling.brock@example.com",
+    "login": "Bowling.brock@example.com",
+    "mobilePhone": "555-415-1337"
+  }
+}*/
     
     then_request("POST",okta_url+okta_path+"?activate=false",{
       headers :{
@@ -86,6 +95,7 @@ exports.parseResponseCreate=(response,back_channel)=>
   else
   {
     returnValue="";
-    slack_call.postMessageTestWithText(utf8_response,back_channel)
+    slack_call.postMessageTestWithText(JSON.stringify(utf8_response),back_channel)
   }
 }
+//
