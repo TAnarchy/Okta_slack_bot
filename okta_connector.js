@@ -4,13 +4,13 @@ const okta_url=process.env.OKTA_URL
 const okta_token=process.env.OKTA_TOKEN
 const okta_path=process.env.OKTA_PATH
 const okta = require('@okta/okta-sdk-nodejs');
-const req = require('sync-request');
+//const req = require('sync-request');
 const then_request=require('then-request')
 const slack_call = require('./slack_callback')
 var returnValue="";
 
 
-exports.getUsers_sync = (auth) => {
+/*exports.getUsers_sync = (auth) => {
 
   try{
     var userRes=req("GET",okta_url+okta_path,{
@@ -35,7 +35,7 @@ exports.getUsers_sync = (auth) => {
   }
   //return JSON.parse(userRes.getBody("utf-8"))
   
-}
+}*/
 
 exports.parseUsers = (val) => {
   returnValue=returnValue+val.profile.firstName+" "+val.profile.email+"\n" 
@@ -60,14 +60,14 @@ exports.getUsers =(auth,back_channel) =>{
 
 exports.parseResponse=(response)=>
 {
-  var utf8_response=response.getBody("utf-8")
+  var utf8_response=JSON.parse(response.getBody("utf-8"))
   if (utf8_response.errorSummary!=undefined)
   {
-    utf8_response.map(exports.parseUsers)
-    slack_call.postMessageTestWithText(returnValue)
+    slack_call.postMessageTestWithText(utf8_response.errorSummary)
   }
   else
   {
-    slack_call.postMessageTestWithText(utf8_response.errorSummary)
+    utf8_response.map(exports.parseUsers)
+    slack_call.postMessageTestWithText(returnValue)
   }
 }
