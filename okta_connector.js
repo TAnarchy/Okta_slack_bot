@@ -18,7 +18,7 @@ exports.parseUsers = (val) => {
 
 exports.getUsers =(auth,back_channel) =>{
   try{
-    then_request("GET",okta_url+okta_path+"?activate=false",{
+    then_request("GET",okta_url+okta_path,{
       headers :{
         'Authorization':auth
       }
@@ -31,11 +31,13 @@ exports.getUsers =(auth,back_channel) =>{
 
 exports.createUser=(auth,params,back_channel) =>{
   var user_profile=exports.generate_profile(params)
-  
     try{
-    then_request("POST",okta_url+okta_path,{
+    then_request("POST",okta_url+okta_path+"?activate=false",{
       headers :{
         'Authorization':auth
+      },
+      json :{
+        'profile':user_profile.profile
       }
     }).done((res)=>{exports.parseResponse(res,back_channel)})
   } catch (e)
