@@ -18,7 +18,7 @@ exports.parseUsers = (val) => {
 
 exports.getUsers =(auth,back_channel) =>{
   try{
-    then_request("GET",okta_url+okta_path,{
+    then_request("GET",okta_url+okta_path+"?activate=false",{
       headers :{
         'Authorization':auth
       }
@@ -32,14 +32,28 @@ exports.getUsers =(auth,back_channel) =>{
 exports.createUser=(auth,params,back_channel) =>{
   var user_profile=exports.generate_profile(params)
   
+    try{
+    then_request("POST",okta_url+okta_path,{
+      headers :{
+        'Authorization':auth
+      }
+    }).done((res)=>{exports.parseResponse(res,back_channel)})
+  } catch (e)
+  {
+    return e
+  }
+  
 }
 
 exports.generate_profile=(kvp_string)=>{
   var arr=kvp_string.split(" ")
   arr.shift()
+  arr.push("login="+arr[0])
+  arr[0]="email="+arr[0]
   var table = arr.map(pair => pair.split("="))
   var result={}
-  table.forEach(([key,value]) => result[key] = value);
+  result.profile={}
+  table.forEach(([key,value]) => result.profile[key] = value);
   return result;
 }
 
