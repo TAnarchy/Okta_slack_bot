@@ -5,24 +5,12 @@ const app = new App({
   token: process.env.SLACK_BOT_TOKEN
 });
 
-exports.postMessageTest= async ()=>{
-try{
-     const result = await app.client.chat.postMessage({
-      token: bot_token,
-      channel: 'D017PG3NAKT',
-      text: `Post back successful`
-     })
-     }
-  catch(e){
-    console.log(e)
-  }
-}
 
-exports.postMessageTestWithText= async (text)=>{
+exports.postMessageTestWithText= async (text,back_channel)=>{
 try{
      const result = await app.client.chat.postMessage({
       token: bot_token,
-      channel: 'D017PG3NAKT',
+      channel: back_channel,
       text: text
      })
      }

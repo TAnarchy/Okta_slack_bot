@@ -39,12 +39,16 @@ app.message('token', async ({ message, say }) => {
   say(`Okta Token set successfully to: ${store.getOktaToken()}`) 
 });
 
-app.message('special', async ({ message, say }) => {
-  say(`user is: ${message.user} and channel is: ${message.channel}`)
-  okta_connect.goBackTest()
+app.message('create', async ({ message, say }) => {
+  
+   if(helper.tokenNotPresent()){
+      say(`Please enter a valid Okta Token`) 
+   }
+  else
+    {
+      var userList = okta_connect.createUser(store.getOktaToken(),message.text,message.channel)
+    }
 });
-
-
 
 // Start your app
 (async () => {

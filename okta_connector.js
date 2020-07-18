@@ -10,40 +10,11 @@ const slack_call = require('./slack_callback')
 var returnValue="";
 
 
-/*exports.getUsers_sync = (auth) => {
-
-  try{
-    var userRes=req("GET",okta_url+okta_path,{
-      headers :{
-        'Authorization':auth
-      }
-    })
-    var userResponse=JSON.parse(userRes.getBody("utf-8"))
-    returnValue="";
-    if (userResponse.errorSummary!=undefined)
-    {
-      returnValue=userResponse.errorSummary
-    }
-    else
-    {
-      userResponse.map(exports.parseUsers)
-    }
-    return returnValue
-  } catch (e)
-  {
-    return e
-  }
-  //return JSON.parse(userRes.getBody("utf-8"))
-  
-}*/
 
 exports.parseUsers = (val) => {
   returnValue=returnValue+val.profile.firstName+" "+val.profile.email+"\n" 
 }
 
-exports.goBackTest =() => {
-  slack_call.postMessageTest()
-}
 
 exports.getUsers =(auth,back_channel) =>{
   try{
@@ -58,16 +29,24 @@ exports.getUsers =(auth,back_channel) =>{
   }
 }
 
-exports.parseResponse=(response)=>
+exports.createUser=(auth,params,back_channel) =>{
+  user_object=exports.kvpConvert(params)
+}
+
+exports.kvpConvert=(kvp_string)=>{
+  
+}
+
+exports.parseResponse=(response,back_channel)=>
 {
   var utf8_response=JSON.parse(response.getBody("utf-8"))
   if (utf8_response.errorSummary!=undefined)
   {
-    slack_call.postMessageTestWithText(utf8_response.errorSummary)
+    slack_call.postMessageTestWithText(utf8_response.errorSummary,back_channel)
   }
   else
   {
     utf8_response.map(exports.parseUsers)
-    slack_call.postMessageTestWithText(returnValue)
+    slack_call.postMessageTestWithText(returnValue,back_channel)
   }
 }
