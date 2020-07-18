@@ -40,10 +40,10 @@ app.message('token', async ({ message, say }) => {
   say(`Okta Token set successfully to: ${store.getOktaToken()}`) 
 });
 
-app.message('special', async ({ message, say }) => {
+/*app.message('special', async ({ message, say }) => {
   say(`user is: ${message.user} and channel is: ${message.channel}`)
   okta_connect.goBackTest()
-});
+});*/
 
 
 
