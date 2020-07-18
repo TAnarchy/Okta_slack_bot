@@ -5,7 +5,7 @@ const okta_token=process.env.OKTA_TOKEN
 const okta_path=process.env.OKTA_PATH
 const okta = require('@okta/okta-sdk-nodejs');
 const req = require('sync-request');
-const index = require('./index')
+const slack_call = require('./slack_callback')
 var returnValue="";
 
 
@@ -40,5 +40,7 @@ exports.parseUsers = (val) => {
   returnValue=returnValue+val.profile.firstName+" "+val.profile.email+"\n" 
 }
 
-exports.
+exports.goBackTest =() => {
+  slack_call.postMessageTest()
+}
 

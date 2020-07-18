@@ -2,6 +2,7 @@ const { App } = require('@slack/bolt');
 const store = require('./store');
 const okta_connect = require('./okta_connector')
 const helper = require('./helper');
+const bot_token=process.env.SLACK_BOT_TOKEN
 const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   token: process.env.SLACK_BOT_TOKEN
@@ -41,20 +42,8 @@ app.message('token', async ({ message, say }) => {
 
 app.message('special', async ({ message, say }) => {
   say(`user is: ${message.user} and channel is: ${message.channel}`)
+  okta_connect.goBackTest()
 });
-
-exports.postMessageTest = () =>{
-  try{
-     const result = app.client.chat.postMessage({
-      token: store.getOktaToken(),
-      channel: 'D017PG3NAKT',
-      text: `Post back successful`
-     })
-     }
-  catch(e){
-    
-  }
-}
 
 
 
