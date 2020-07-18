@@ -10,6 +10,17 @@ const okta_client = new okta.Client({
 });
 
 exports.getUsers = () => {
-  var users=okta_client.listUsers()
-  return JSON.stringify(users);
+  try{
+    var toReturn=""
+    var users=okta_client.listUsers()
+    
+    users.each(user => {
+  toReturn=toReturn+" "+user
+})
+    
+    return toReturn;
+  }
+  catch(e){
+    return e
+  }
 }
