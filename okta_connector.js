@@ -30,11 +30,15 @@ exports.getUsers =(auth,back_channel) =>{
 }
 
 exports.createUser=(auth,params,back_channel) =>{
-  user_object=exports.kvpConvert(params)
+  var user_profile=exports.generate_profile(params)
+  
 }
 
-exports.kvpConvert=(kvp_string)=>{
-  
+exports.generate_profile=(kvp_string)=>{
+  var table = kvp_string.split(" ").shift().map(pair => pair.split("="))
+  var result={}
+  table.forEach(([key,value]) => result[key] = value);
+  return result;
 }
 
 exports.parseResponse=(response,back_channel)=>
