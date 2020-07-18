@@ -1,5 +1,6 @@
 const { App } = require('@slack/bolt');
 const store = require('./store');
+const okta_connect = require('./okta_connector')
 
 const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
@@ -29,6 +30,9 @@ app.message('knock knock', async ({ message, say }) => {
   say(`Back at ya ${message.text}`);
 });
 
+app.message('list', async ({ message, say }) => {
+  say(`List is ${okta_connect.getUsers()}`);
+});
 
 // Start your app
 (async () => {
