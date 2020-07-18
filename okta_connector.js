@@ -45,7 +45,7 @@ exports.goBackTest =() => {
   slack_call.postMessageTest()
 }
 
-exports.getUsers =(auth) =>{
+exports.getUsers =(auth,back_channel) =>{
   
   
   try{
@@ -55,7 +55,7 @@ exports.getUsers =(auth) =>{
       headers :{
         'Authorization':auth
       }
-    }).done((res)=>{slack_call.postMessageTestWithText("Success back and back")})
+    }).done((res)=>{slack_call.postMessageTestWithText(res)})
   } catch (e)
   {
     return e

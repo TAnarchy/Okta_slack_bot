@@ -32,7 +32,7 @@ app.message('list', async ({ message, say }) => {
     {
     /*  var userList = okta_connect.getUsers_sync(store.getOktaToken())
       say(`${userList}`);*/
-      var userList = okta_connect.getUsers(store.getOktaToken())
+      var userList = okta_connect.getUsers(store.getOktaToken(),message.channel)
     }
 });
 
