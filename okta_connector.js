@@ -61,7 +61,13 @@ exports.getUsers =(auth,back_channel) =>{
 exports.parseResponse=(response)=>
 {
   var utf8_response=response.getBody("utf-8")
-  
-  
-  
+  if (utf8_response.errorSummary!=undefined)
+  {
+    utf8_response.map(exports.parseUsers)
+    slack_call.postMessageTestWithText(returnValue)
+  }
+  else
+  {
+    slack_call.postMessageTestWithText(utf8_response.errorSummary)
+  }
 }
