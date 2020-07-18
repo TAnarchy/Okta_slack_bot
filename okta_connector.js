@@ -35,16 +35,7 @@ exports.createUser=(auth,params,back_channel) =>{
   let user_profile=exports.generate_profile(params.trim())
   slack_call.postMessageTestWithText("User Profile "+JSON.stringify(user_profile),"D017PG3NAKT")
   console.log("User Profile "+JSON.stringify(user_profile))
-  /* let user_profile={
-  "profile": {
-    "firstName": "Bowling",
-    "lastName": "Brock",
-    "email": "Bowling.brock@example.com",
-    "login": "Bowling.brock@example.com",
-    "mobilePhone": "555-415-1337"
-  }
-}*/
-    
+
     then_request("POST",okta_url+okta_path+"?activate=false",{
       headers :{
         'Authorization':auth
@@ -89,6 +80,7 @@ exports.generate_profile=(kvp_string)=>{
 exports.parseResponse=(response,back_channel)=>
 {
   var utf8_response=JSON.parse(response.getBody("utf-8"))
+  slack_call.postMessageTestWithText("returnValue",back_channel)
   if (utf8_response.errorSummary!=undefined)
   {
     slack_call.postMessageTestWithText(utf8_response.errorSummary,back_channel)
@@ -111,14 +103,16 @@ exports.parseResponseCreate=(response,back_channel)=>
   }
   else
   {
-   let createReturn ='[Creation Successful]\n'
-   for (const property in utf8_response.profile) 
-   {
-     if (utf8_response.profile[property]!=)
-   }
-   
-   
-    slack_call.postMessageTestWithText(JSON.stringify(utf8_response),back_channel)
+    let createReturn ='[Creation Successful]\n'
+    for (const property in utf8_response.profile) 
+    {
+      if (utf8_response.profile[property]!=null){
+      //  say(`Okta Token set successfully to: ${store.getOktaToken()}`) 
+        createReturn+=`${property}: ${utf8_response.profile[property]} \n`
+       
+      }
+    }
+    slack_call.postMessageTestWithText(createReturn,back_channel)
   }
 }
 //
