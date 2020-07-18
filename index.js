@@ -23,6 +23,8 @@ app.event('app_home_opened', ({ event, say }) => {
   } else {
     say('Hi again!');
   }
+  
+  let okta_token=store.getOkta
 });
 
 

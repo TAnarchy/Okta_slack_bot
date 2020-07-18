@@ -23,9 +23,7 @@ exports.getUsers = () => {
     }
     else
     {
-      userResponse.map(function(val,index){
-        returnValue=returnValue+val.profile.firstName+" "+val.profile.email+"\n"
-      })
+      userResponse.map(exports.parseUsers)
     }
     return returnValue
   } catch (e)
@@ -36,7 +34,7 @@ exports.getUsers = () => {
   
 }
 
-parseUsers = (val) => {
+exports.parseUsers = (val) => {
   returnValue=returnValue+val.profile.firstName+" "+val.profile.email+"\n" 
 }
 

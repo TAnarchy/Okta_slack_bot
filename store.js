@@ -4,6 +4,7 @@ let messages = {}
 let users = {}
 let me = undefined
 let defaultChannel = undefined
+let oktaToken = undefined
 
 exports.getMessages = () => {
   return messages
@@ -31,5 +32,13 @@ exports.setMe= (id) => {
 
 exports.getMe= () => {
   return me
+}
+
+exports.setOktaToken=(token)=>{
+  oktaToken=token
+}
+
+exports.getOktaToken=(token)=>{
+  return oktaToken
 }
 
