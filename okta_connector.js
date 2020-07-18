@@ -13,10 +13,10 @@ exports.getUsers = () => {
       token: "00O5uxkxKYooyJEJZMgqDaahNdCaFK15AQi7ZqZ9Pp"    // Obtained from Developer Dashboard
     });
     console.log("cat debugger")
-    //otykmxcq6cniUHjZ74x6
+    debugger
   
     var toReturn=""
-    var users=okta_client.listUsers().next()
+    var users=okta_client.listUsers()
  
     return users
   }
