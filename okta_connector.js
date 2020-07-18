@@ -1,24 +1,32 @@
 const https = require('https');
 const okta_url=process.env.OKTA_URL
 const okta_token=process.env.OKTA_TOKEN
+const okta_path=process.env.OKTA_PATH
 exports.getUsers = () => {
   
-  https.get(okta_url, (resp) => {
-  let data = '';
+  var headers={"Authorization":"SSWS 00O5uxkxKYooyJEJZMgqDaahNdCaFK15AQi7ZqZ9Pp"}
+  
+  var options = {
+  hostname: okta_url,
+  path: okta_path,
+  method: 'GET',
+  headers:headers
+};
+  
+  
+var req = https.request(options, function(res) {
+  console.log("statusCode: ", res.statusCode);
+  console.log("headers: ", res.headers);
 
-  // A chunk of data has been recieved.
-  resp.on('data', (chunk) => {
-    data += chunk;
+  res.on('data', function(d) {
+    return "Success"
   });
+});
+req.end();
 
-  // The whole response has been received. Print out the result.
-  resp.on('end', () => {
-    console.log(JSON.parse(data).explanation);
-  });
-
-}).on("error", (err) => {
-  console.log("Error: " + err.message);
+req.on('error', function(e) {
+  return "failure"
 });
   
-  return "Users"
+  
 }
