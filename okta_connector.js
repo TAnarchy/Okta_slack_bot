@@ -9,16 +9,16 @@ const okta = require('@okta/okta-sdk-nodejs');
 exports.getUsers = () => {
   try{
     const okta_client = new okta.Client({
-      orgUrl: "https://moveworkseddie-admin.okta.com/",
+      orgUrl: "https://moveworkseddie-admin.okta.com",
       token: "00O5uxkxKYooyJEJZMgqDaahNdCaFK15AQi7ZqZ9Pp"    // Obtained from Developer Dashboard
     });
     console.log("cat debugger")
     //otykmxcq6cniUHjZ74x6
   
     var toReturn=""
-    var users=okta_client.listUsers()
+    var users=okta_client.listUsers().next()
  
-    return JSON.stringify(users)
+    return users
   }
   catch(e){
     return e
