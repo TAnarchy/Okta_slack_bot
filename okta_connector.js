@@ -60,11 +60,16 @@ exports.createUser=(auth,params,back_channel) =>{
 }
 
 exports.generate_profile=(kvp_string)=>{
-  slack_call.postMessageTestWithText(kvp_string.length,"D017PG3NAKT")
+  //kvp_string.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+  slack_call.postMessageTestWithText("KVP string is: "+kvp_string,"D017PG3NAKT")
+  
   let arr=kvp_string.split(" ")
+  slack_call.postMessageTestWithText("ARray is: "+arr,"D017PG3NAKT")
   arr.shift()
+  slack_call.postMessageTestWithText("ARray is v2: "+arr,"D017PG3NAKT")
   arr.push("login="+arr[0])
   arr[0]="email="+arr[0]
+   
   let table = arr.map(pair => pair.split("="))
   let result={}
   result.profile={}
