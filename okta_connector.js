@@ -80,7 +80,7 @@ exports.generate_profile=(kvp_string)=>{
   result.profile={}
   table.forEach(([key,value]) => result.profile[key] = value);
   var alteredValue=result.profile.email.split("|")[0]
-  alteredValue.replace("<","")
+  alteredValue=alteredValue.split(":")[1]
   result.profile.email=alteredValue
   result.profile.login=alteredValue
   return result;
@@ -103,7 +103,7 @@ exports.parseResponse=(response,back_channel)=>
 
 exports.parseResponseCreate=(response,back_channel)=>
 {
-  slack_call.postMessageTestWithText("post response create "+response.getBody(),"D017PG3NAKT")
+  
   var utf8_response=JSON.parse(response.getBody("utf-8"))
   if (utf8_response.errorSummary!=undefined)
   {
@@ -111,7 +111,13 @@ exports.parseResponseCreate=(response,back_channel)=>
   }
   else
   {
-    returnValue="";
+   let createReturn ='[Creation Successful]\n'
+   for (const property in utf8_response.profile) 
+   {
+     if (utf8_response.profile[property]!=)
+   }
+   
+   
     slack_call.postMessageTestWithText(JSON.stringify(utf8_response),back_channel)
   }
 }
