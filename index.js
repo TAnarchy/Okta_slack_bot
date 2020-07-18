@@ -1,7 +1,7 @@
 const { App } = require('@slack/bolt');
 const store = require('./store');
 const okta_connect = require('./okta_connector')
-
+const helper = require('./helper');
 const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   token: process.env.SLACK_BOT_TOKEN
@@ -10,21 +10,11 @@ const app = new App({
 
 app.event('app_home_opened', ({ event, say }) => {  
   // Look up the user from DB
-  let user = store.getUser(event.user);
+
   
-  if(!user) {
-    user = {
-      user: event.user,
-      channel: event.channel
-    };
-    store.addUser(user);
-    
-    say(`Hello world, and welcome <@${event.user}>!`);
-  } else {
-    say('Hi again!');
+  if (helper.tokenNotPresent()){
+    say(`Please enter a valid Okta Token`)
   }
-  
-  let okta_token=store.getOkta
 });
 
 
@@ -33,9 +23,23 @@ app.message('knock knock', async ({ message, say }) => {
 });
 
 app.message('list', async ({ message, say }) => {
-  var userList = okta_connect.getUsers()
-  say(`${userList}`);
+  
+   if(helper.tokenNotPresent()){
+      say(`Please enter a valid Okta Token`) 
+   }
+  else
+    {
+      var userList = okta_connect.getUsers()
+      say(`${userList}`);
+    }
 });
+
+app.message('token', async ({ message, say }) => {
+  store.setOktaToken(message.text)
+  say(`Okta Token set successfully`) 
+});
+
+
 
 // Start your app
 (async () => {
