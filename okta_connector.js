@@ -4,7 +4,6 @@ const okta_url=process.env.OKTA_URL
 const okta_token=process.env.OKTA_TOKEN
 const okta_path=process.env.OKTA_PATH
 const okta = require('@okta/okta-sdk-nodejs');
-//const req = require('sync-request');
 const then_request=require('then-request')
 const slack_call = require('./slack_callback')
 var returnValue="";
@@ -27,9 +26,13 @@ exports.getUsers =(auth,back_channel,extra,queryParams) =>{
         {
           exports.parseResponse(res,back_channel)
         }
-      else
+      else if(extra=="query")
         {
           exports.parseResponseQuery(res,back_channel,queryParams)
+        }
+      else if (extra=="update")
+        {
+          exports.updateResponseQuery(res,back_channel,queryParams)
         }
     })
   } catch (e)
@@ -63,6 +66,10 @@ exports.createUser=(auth,params,back_channel) =>{
 
 exports.queryUsers=(auth,params,back_channel)=>{
     var user_list=exports.getUsers(auth,back_channel,"query",params)
+}
+
+exports.updateUser=(auth,params,back_channel)=>{
+    var user_list=exports.getUsers(auth,back_channel,"update",params)
 }
 
 exports.generate_profile_query=(kvp_string)=>{
@@ -151,6 +158,15 @@ exports.parseResponseQuery =(user_list,back_channel,query_params)=>{
   var toReturnQuery=`Email: ${e_mail}\n`
   search_params_array.forEach(element=>toReturnQuery+=`${element}: ${queried_user.profile[element]}\n`)
   slack_call.postMessageTestWithText(toReturnQuery,back_channel)
+  } catch(e){
+    slack_call.postMessageTestWithText("Query failed",back_channel)
+  }
+}
+
+exports.updateResponseQuery =(user_list,back_channel,query_params)=>{
+  try{
+    
+  slack_call.postMessageTestWithText("Update successful",back_channel)
   } catch(e){
     slack_call.postMessageTestWithText("Query failed",back_channel)
   }

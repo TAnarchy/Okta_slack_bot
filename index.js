@@ -61,6 +61,18 @@ app.message('query', async ({ message, say }) => {
     }
 });
 
+app.message('update', async ({ message, say }) => {
+  
+   if(helper.tokenNotPresent()){
+      say(`Please enter a valid Okta Token`) 
+   }
+  else
+    {
+      var userList = okta_connect.updateUser(store.getOktaToken(),message.text,message.channel)
+    }
+});
+
+
 // Start your app
 (async () => {
   await app.start(process.env.PORT || 3000);
