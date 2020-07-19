@@ -16,8 +16,8 @@ exports.parseUsers = (val) => {
 }
 
 
-exports.getUsers =(auth,back_channel,extra) =>{
-  //try{
+exports.getUsers =(auth,back_channel,extra,queryParams) =>{
+  try{
     then_request("GET",okta_url+okta_path,{
       headers :{
         'Authorization':auth
@@ -29,13 +29,13 @@ exports.getUsers =(auth,back_channel,extra) =>{
         }
       else
         {
-          return res
+          exports.parseResponseQuery(res,back_channel,queryParams)
         }
     })
-  //} catch (e)
-  //{
-   // return e
-  //}
+  } catch (e)
+  {
+    return e
+  }
 }
 
 exports.createUser=(auth,params,back_channel) =>{
@@ -61,19 +61,7 @@ exports.createUser=(auth,params,back_channel) =>{
 }
 
 exports.queryUsers=(auth,params,back_channel)=>{
-  //try{
-    var user_list=exports.getUsers(auth,back_channel,"query")
-    //JSON.parse(response.getBody("utf-8"))
-    var user_list_parse=JSON.parse(user_list.getBody("utf-8"))
-    var search_params_array=exports.generate_profile_query(params)
-    var e_mail= search_params_array.shift()
-    slack_call.postMessageTestWithText("No errors in query",back_channel)
-    
-  //}
- /* catch(e)
-    {
-      slack_call.postMessageTestWithText("Error thrown in query",back_channel)
-    }*/
+    var user_list=exports.getUsers(auth,back_channel,"query",params)
 }
 
 exports.generate_profile_query=(kvp_string)=>{
@@ -150,5 +138,13 @@ exports.parseResponseCreate=(response,back_channel)=>
   }catch (e){
     slack_call.postMessageTestWithText("Okta responded with an error, make sure values are correct and the user hasn't alreadybeen created",back_channel)
   }
+}
+
+exports.parseResponseQuery =(user_list,back_channel,query_params)=>{
+  
+    var search_params_array=exports.generate_profile_query(query_params)
+    var user_list_body=JSON.parse(user_list.getBody("utf-8"))
+    var e_mail= search_params_array.shift()
+    slack_call.postMessageTestWithText("No errors in query: "+e_mail,back_channel)
 }
 //
