@@ -107,7 +107,6 @@ exports.generate_profile_update=(kvp_string)=>{
   console.log("ARray is: "+arr)
   arr.shift()
   var email=arr.shift()
-  
   let table = arr.map(pair => pair.split("="))
   let result={}
   result.profile={}
