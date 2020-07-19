@@ -146,5 +146,16 @@ exports.parseResponseQuery =(user_list,back_channel,query_params)=>{
     var user_list_body=JSON.parse(user_list.getBody("utf-8"))
     var e_mail= search_params_array.shift()
     slack_call.postMessageTestWithText("No errors in query: "+e_mail,back_channel)
+  
+  /*for (const property in utf8_response.profile) 
+    {
+      if (utf8_response.profile[property]!=null){
+      //  say(`Okta Token set successfully to: ${store.getOktaToken()}`) 
+        createReturn+=`${property}: ${utf8_response.profile[property]} \n`
+       
+      }
+    }*/
+  
+  user_list_body
 }
 //
