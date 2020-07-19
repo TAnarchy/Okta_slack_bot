@@ -100,6 +100,21 @@ exports.generate_profile=(kvp_string)=>{
   return result;
 }
 
+exports.generate_profile_update=(kvp_string)=>{
+  var split_character=kvp_string.charAt(6)
+  console.log("KVP STRING IS: "+kvp_string)
+  let arr=kvp_string.split(split_character).join(',').split(" ").join(',').split(",")
+  console.log("ARray is: "+arr)
+  arr.shift()
+  var email=arr.shift()
+  
+  let table = arr.map(pair => pair.split("="))
+  let result={}
+  result.profile={}
+  table.forEach(([key,value]) => result.profile[key] = value);
+  return [result,email];
+}
+
 exports.parseResponse=(response,back_channel)=>
 {
   var utf8_response=JSON.parse(response.getBody("utf-8"))
@@ -165,7 +180,9 @@ exports.parseResponseQuery =(user_list,back_channel,query_params)=>{
 
 exports.updateResponseQuery =(user_list,back_channel,query_params)=>{
   try{
-    
+    var email_and_search=exports.generate_profile_update(query_params)
+    var search_params_array=email_and_search[0]
+    var user_list_body=JSON.parse(user_list.getBody("utf-8"))
   slack_call.postMessageTestWithText("Update successful",back_channel)
   } catch(e){
     slack_call.postMessageTestWithText("Query failed",back_channel)
