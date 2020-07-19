@@ -96,7 +96,8 @@ exports.parseResponse=(response,back_channel)=>
 
 exports.parseResponseCreate=(response,back_channel)=>
 {
-  console.log("definitely caught error"+response.getBody("utf-8"))
+ 
+  console.log("definitely caught error"+JSON.stringify(response))
   var utf8_response=JSON.parse(response.getBody("utf-8"))
   console.log("definitely caught error again"+JSON.stringify(utf8_response))
   if (utf8_response.errorSummary!=undefined)
@@ -116,5 +117,6 @@ exports.parseResponseCreate=(response,back_channel)=>
     }
     slack_call.postMessageTestWithText(createReturn,back_channel)
   }
+  
 }
 //
