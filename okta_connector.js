@@ -205,5 +205,16 @@ exports.updateResponseQuery =(user_list,auth,back_channel,query_params)=>{
 
 exports.parseResponseUpdate2=(res,back_channel)=>{
   slack_call.postMessageTestWithText("At Update 2",back_channel)
+  var utf8_response=JSON.parse(res.getBody("utf-8"))
+  let updateReturn ='[Update Successful]\n'
+    for (const property in utf8_response.profile) 
+    {
+      if (utf8_response.profile[property]!=null){
+      //  say(`Okta Token set successfully to: ${store.getOktaToken()}`) 
+        updateReturn+=`${property}: ${utf8_response.profile[property]} \n`
+       
+      }
+    }
+    slack_call.postMessageTestWithText(updateReturn,back_channel)
 }
 //
