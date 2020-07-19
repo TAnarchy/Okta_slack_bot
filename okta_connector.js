@@ -185,15 +185,19 @@ exports.updateResponseQuery =(user_list,auth,back_channel,query_params)=>{
     var user_list_body=JSON.parse(user_list.getBody("utf-8"))
     
    var queried_user= user_list_body.filter(obj =>(obj.profile.email.includes(e_mail.trim())))[0]
+   for (const property in search_params_result.profile)
+     {
+       queried_user.profile[property]=search_params_result.profile[property]
+     }
    var queried_user_id=queried_user.id
    console.log("PUt destiantion:"+okta_url+okta_path+"/"+queried_user_id)
-    console.log("PUt profile:"+JSON.stringify(search_params_result.profile))
+    console.log("PUt profile:"+JSON.stringify(queried_user.profile))
     then_request("PUT",okta_url+okta_path+"/"+queried_user_id,{
       headers :{
         'Authorization':auth
       },
       json :{
-        'profile':search_params_result.profile
+        'profile':queried_user.profile
       }
     }).done((res)=>{exports.parseResponseUpdate2(res,back_channel)})
     
