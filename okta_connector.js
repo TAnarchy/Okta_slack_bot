@@ -147,7 +147,9 @@ exports.parseResponseQuery =(user_list,back_channel,query_params)=>{
     var e_mail= search_params_array.shift()
     slack_call.postMessageTestWithText("No errors in query: "+e_mail,back_channel)
   console.log(user_list_body)
-  var queried_user= user_list_body.filter(obj =>(obj.profile.email==e_mail))[0]
+  //var queried_user= user_list_body.filter(obj =>(obj.profile.email.includes(e_mail.trim())))[0]
+  var queried_user= user_list_body.filter(exports.handleProfile)[0]
+  console.log("queried user: "+queried_user)
   var toReturnQuery=`Email: ${e_mail}\n`
   search_params_array.forEach(element=>toReturnQuery+=`${element}: ${queried_user.profile[element]}\n`)
   slack_call.postMessageTestWithText(toReturnQuery,back_channel)
