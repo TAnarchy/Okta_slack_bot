@@ -33,7 +33,7 @@ exports.createUser=(auth,params,back_channel) =>{
   
   try{
   let user_profile=exports.generate_profile(params.trim())
-  slack_call.postMessageTestWithText("User Profile "+JSON.stringify(user_profile),"D017PG3NAKT")
+  //slack_call.postMessageTestWithText("User Profile "+JSON.stringify(user_profile),"D017PG3NAKT")
   console.log("User Profile "+JSON.stringify(user_profile))
 
     then_request("POST",okta_url+okta_path+"?activate=false",{
@@ -54,19 +54,15 @@ exports.createUser=(auth,params,back_channel) =>{
 exports.generate_profile=(kvp_string)=>{
   //kvp_string.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
   var split_character=kvp_string.charAt(6)
-  slack_call.postMessageTestWithText("KVP string is: "+kvp_string.charAt(6),"D017PG3NAKT")
   console.log("KVP STRING IS: "+kvp_string)
   let arr=kvp_string.split(split_character).join(',').split(" ").join(',').split(",")
-  slack_call.postMessageTestWithText("ARray is: "+arr,"D017PG3NAKT")
   console.log("ARray is: "+arr)
   arr.shift()
-  slack_call.postMessageTestWithText("ARray is v2: "+arr,"D017PG3NAKT")
+  
   
   arr.push("login="+arr[0])
   arr[0]="email="+arr[0]
-   slack_call.postMessageTestWithText("post edit: "+arr,"D017PG3NAKT")
   let table = arr.map(pair => pair.split("="))
-  slack_call.postMessageTestWithText("table is "+table,"D017PG3NAKT")
   let result={}
   result.profile={}
   table.forEach(([key,value]) => result.profile[key] = value);
@@ -80,7 +76,6 @@ exports.generate_profile=(kvp_string)=>{
 exports.parseResponse=(response,back_channel)=>
 {
   var utf8_response=JSON.parse(response.getBody("utf-8"))
-  slack_call.postMessageTestWithText("Error path 1",back_channel)
   if (utf8_response.errorSummary!=undefined)
   {
     slack_call.postMessageTestWithText("Error path 2",back_channel)
@@ -96,7 +91,7 @@ exports.parseResponse=(response,back_channel)=>
 
 exports.parseResponseCreate=(response,back_channel)=>
 {
- 
+  try{
   console.log("definitely caught error"+JSON.stringify(response))
   var utf8_response=JSON.parse(response.getBody("utf-8"))
   console.log("definitely caught error again"+JSON.stringify(utf8_response))
@@ -117,6 +112,8 @@ exports.parseResponseCreate=(response,back_channel)=>
     }
     slack_call.postMessageTestWithText(createReturn,back_channel)
   }
-  
+  }catch (e){
+    slack_call.postMessageTestWithText("Okta responded with an error, make sure values are correct and the user hasn't alreadybeen created",back_channel)
+  }
 }
 //
