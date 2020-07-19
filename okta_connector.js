@@ -187,7 +187,9 @@ exports.updateResponseQuery =(user_list,auth,back_channel,query_params)=>{
     
    var queried_user= user_list_body.filter(obj =>(obj.profile.email.includes(e_mail.trim())))[0]
    var queried_user_id=queried_user.id
-    then_request("PUT",okta_url+okta_path+`/${queried_user_id}`,{
+   console.log("PUt destiantion:"+okta_url+okta_path+"/"+queried_user_id)
+    console.log("PUt profile:"+JSON.stringify(search_params_result.profile))
+    then_request("PUT",okta_url+okta_path+"/"+queried_user_id,{
       headers :{
         'Authorization':auth
       },
