@@ -16,13 +16,22 @@ exports.parseUsers = (val) => {
 }
 
 
-exports.getUsers =(auth,back_channel) =>{
+exports.getUsers =(auth,back_channel,extra) =>{
   try{
     then_request("GET",okta_url+okta_path,{
       headers :{
         'Authorization':auth
       }
-    }).done((res)=>{exports.parseResponse(res,back_channel)})
+    }).done((res)=>{
+      if(extra=="list")
+        {
+          exports.parseResponse(res,back_channel)
+        }
+      else
+        {
+          return res
+        }
+    })
   } catch (e)
   {
     return e
@@ -50,6 +59,29 @@ exports.createUser=(auth,params,back_channel) =>{
   }
   
 }
+
+exports.queryUser=(auth,params,back_channel)=>{
+  try{
+    var listResponse=exports.getUsers(auth,back_channel,"query")
+    var 
+    
+  }
+  catch(e)
+    {
+      slack_call.postMessageTestWithText(e,back_channel)
+    }
+}
+
+exports.generate_profile_query=(kvp_string)=>{
+  //kvp_string.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+  var split_character=kvp_string.charAt(5)
+  console.log("KVP STRING IS: "+kvp_string)
+  let arr=kvp_string.split(split_character).join(',').split(" ").join(',').split(",")
+  console.log("ARray is: "+arr)
+  arr.shift()
+  return arr
+}
+
 
 exports.generate_profile=(kvp_string)=>{
   //kvp_string.replace(/[\x00-\x1F\x7F-\x9F]/g, "");

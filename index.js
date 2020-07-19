@@ -30,7 +30,7 @@ app.message('list', async ({ message, say }) => {
    }
   else
     {
-      var userList = okta_connect.getUsers(store.getOktaToken(),message.channel)
+      var userList = okta_connect.getUsers(store.getOktaToken(),message.channel,"list")
     }
 });
 
@@ -57,7 +57,7 @@ app.message('query', async ({ message, say }) => {
    }
   else
     {
-      var userList = okta_connect.query(store.getOktaToken(),message.text,message.channel)
+      var userList = okta_connect.queryUsers(store.getOktaToken(),message.text,message.channel)
     }
 });
 
