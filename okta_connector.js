@@ -90,11 +90,6 @@ exports.generate_profile=(kvp_string)=>{
   let result={}
   result.profile={}
   table.forEach(([key,value]) => result.profile[key] = value);
- /* var alteredValue=result.profile.email.split("|")[0]
-  alteredValue=alteredValue.split(":")[1]*/
-  //alteredValue=result.profile.email
-  //result.profile.email=alteredValue
-  //result.profile.login=alteredValue
   return result;
 }
 
@@ -143,17 +138,21 @@ exports.parseResponseCreate=(response,back_channel)=>
 }
 
 exports.parseResponseQuery =(user_list,back_channel,query_params)=>{
-  
+  try{
     var search_params_array=exports.generate_profile_query(query_params)
     var user_list_body=JSON.parse(user_list.getBody("utf-8"))
     var e_mail= search_params_array.shift()
-    var normalize_email=e_mail.split("|")[0]
-    normalize_email=normalize_email.split(":")[1]
+   // var normalize_email=e_mail.split("|")[0]
+    //normalize_email=normalize_email.split(":")[1]
+  var normalize_email=e_mail
   console.log("normalized_email: "+normalize_email)
   console.log(user_list_body)
   var queried_user= user_list_body.filter(obj =>(obj.profile.email.includes(normalize_email.trim())))[0]
   var toReturnQuery=`Email: ${e_mail}\n`
   search_params_array.forEach(element=>toReturnQuery+=`${element}: ${queried_user.profile[element]}\n`)
   slack_call.postMessageTestWithText(toReturnQuery,back_channel)
+  } catch(e){
+    slack_call.postMessageTestWithText("Query failed",back_channel)
+  }
 }
 //
