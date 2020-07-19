@@ -12,7 +12,7 @@ var returnValue="";
 
 
 exports.parseUsers = (val) => {
-  returnValue=returnValue+val.profile.firstName+" "+val.profile.email+"\n" 
+  returnValue=returnValue+val.profile.firstName+" "+val.profile.lastName+" "+val.profile.email+"\n" 
 }
 
 
