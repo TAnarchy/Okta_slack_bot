@@ -32,7 +32,7 @@ exports.getUsers =(auth,back_channel,extra,queryParams) =>{
         }
       else if (extra=="update")
         {
-          exports.updateResponseQuery(res,back_channel,queryParams)
+          exports.updateResponseQuery(res,auth,back_channel,queryParams)
         }
     })
   } catch (e)
@@ -112,7 +112,7 @@ exports.generate_profile_update=(kvp_string)=>{
   let result={}
   result.profile={}
   table.forEach(([key,value]) => result.profile[key] = value);
-  return [result,email];
+  return {"result":result,"e_mail":email};
 }
 
 exports.parseResponse=(response,back_channel)=>
@@ -178,14 +178,31 @@ exports.parseResponseQuery =(user_list,back_channel,query_params)=>{
   }
 }
 
-exports.updateResponseQuery =(user_list,back_channel,query_params)=>{
+exports.updateResponseQuery =(user_list,auth,back_channel,query_params)=>{
   try{
     var email_and_search=exports.generate_profile_update(query_params)
-    var search_params_array=email_and_search[0]
+    var search_params_result=email_and_search["result"]
+    var e_mail=email_and_search["e_mail"]
     var user_list_body=JSON.parse(user_list.getBody("utf-8"))
+    
+   var queried_user= user_list_body.filter(obj =>(obj.profile.email.includes(e_mail.trim())))[0]
+   var queried_user_id=queried_user.id
+    then_request("PUT",okta_url+okta_path+`/${queried_user_id}`,{
+      headers :{
+        'Authorization':auth
+      },
+      json :{
+        'profile':search_params_result.profile
+      }
+    }).done((res)=>{exports.parseResponseUpdate2(res,back_channel)})
+    
   slack_call.postMessageTestWithText("Update successful",back_channel)
   } catch(e){
     slack_call.postMessageTestWithText("Query failed",back_channel)
   }
+}
+
+exports.parseResponseUpdate2=(res,back_channel)=>{
+  slack_call.postMessageTestWithText("At Update 2",back_channel)
 }
 //
