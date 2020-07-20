@@ -76,6 +76,14 @@ app.message('update', async ({ message, say }) => {
 
 // Start your app
 (async () => {
+  
+  
+http.createServer(function(request, response) {
+  response.writeHead(200, {"Content-Type": "text/plain"});
+  response.write("Hello World");
+  response.end();
+}).listen(process.env.PORT)
+  
   await app.start(process.env.PORT || 3000);
   console.log('⚡️ Bolt app is running!');
 })();
