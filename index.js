@@ -38,7 +38,7 @@ app.message('list', async ({ message, say }) => {
 });
 
 app.message('token', async ({ message, say }) => {
-  console.log("token is: "+app.token)
+  console.log("token is: "+JSON.stringify(app))
   store.setOktaToken("SSWS "+message.text.split('=')[1])
   say(`Okta Token set successfully to: ${store.getOktaToken()}`) 
 });
