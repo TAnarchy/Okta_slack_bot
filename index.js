@@ -35,8 +35,10 @@ app.message('list', async ({ message, say }) => {
 });
 
 app.message('token', async ({ message, say }) => {
-  store.setOktaToken("SSWS "+message.text.split('=')[1])
-  say(`Okta Token set successfully to: ${store.getOktaToken()}`) 
+  var tokenPart=message.text.split("=")[1]
+  var tokenObject={"okta":"SSWS "+tokenPart.split(",")[0],"bot":tokenPart.split(",")[1],"secret":tokenPart.split(",")[2]}
+  store.setOktaToken(tokenObject)
+  say(`Tokens set to: ${JSON.stringify(store.getOktaToken())}`) 
 });
 
 app.message('create', async ({ message, say }) => {
