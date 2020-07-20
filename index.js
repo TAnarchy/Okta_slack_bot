@@ -2,6 +2,7 @@ const { App } = require('@slack/bolt');
 const store = require('./store');
 const okta_connect = require('./okta_connector')
 const helper = require('./helper');
+const bodyParser = require('body-parser')
 const bot_token=process.env.SLACK_BOT_TOKEN
 const test=1
 var http = require("http");
