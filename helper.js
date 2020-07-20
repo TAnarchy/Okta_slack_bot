@@ -8,11 +8,3 @@ exports.tokenNotPresent = () => {
     }
   return false
 }
-
-exports.processData=(incoming_text)=>{
- // console.log("In proces data")
-  var command = incoming_text.split(" ")
-  //console.log("command: "+command)
-}
-
-
