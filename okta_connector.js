@@ -6,6 +6,8 @@ const okta_path=process.env.OKTA_PATH
 const okta = require('@okta/okta-sdk-nodejs');
 const then_request=require('then-request')
 const slack_call = require('./slack_callback')
+const first_space_position=6
+const fitst_space_position_query=5
 var returnValue="";
 
 
@@ -76,6 +78,15 @@ exports.updateUser=(auth,params,back_channel)=>{
     var user_list=exports.getUsers(auth,back_channel,"update",params)
 }
 
+exports.generate_profile_universal=(kvp_string,space_char)=>{
+  var split_character=kvp_string.charAt(space_char)
+  console.log("KVP STRING IS: "+kvp_string)
+  let arr=kvp_string.split(split_character).join(',').split(" ").join(',').split(",")
+  console.log("ARray is: "+arr)
+  arr=exports.removeCommand(arr)
+  return arr
+}
+
 exports.generate_profile_query=(kvp_string)=>{
   var split_character=kvp_string.charAt(5)
   console.log("KVP STRING IS: "+kvp_string)
@@ -95,12 +106,15 @@ exports.generate_profile=(kvp_string)=>{
   arr=exports.removeCommand(arr)
   
   
-  arr.push("login="+arr[0])
-  arr[0]="email="+arr[0]
+  /*arr.push("login="+arr[0])
+  arr[0]="email="+arr[0]*/
+  var email=arr.shift()
   let table = arr.map(pair => pair.split("="))
   let result={}
   result.profile={}
   table.forEach(([key,value]) => result.profile[key] = value);
+  result.profile["email"]=email
+  result.profile["login"]=email
   return result;
 }
 
@@ -164,7 +178,8 @@ exports.parseResponseCreate=(response,back_channel)=>
 
 exports.parseResponseQuery =(user_list,back_channel,query_params)=>{
   try{
-    var search_params_array=exports.generate_profile_query(query_params)
+   // var search_params_array=exports.generate_profile_universal(query_params,first_space_position)
+    var search_params_array=exports.generate_profile_query(query_params,first_space_position)
     var user_list_body=JSON.parse(user_list.getBody("utf-8"))
     var e_mail= search_params_array.shift()
    // var normalize_email=e_mail.split("|")[0]
