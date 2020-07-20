@@ -4,6 +4,7 @@ const okta_connect = require('./okta_connector')
 const helper = require('./helper');
 const bot_token=process.env.SLACK_BOT_TOKEN
 const test=1
+var http = require("http");
 const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   token: process.env.SLACK_BOT_TOKEN
@@ -82,9 +83,10 @@ http.createServer(function(request, response) {
   response.writeHead(200, {"Content-Type": "text/plain"});
   response.write("Hello World");
   response.end();
-}).listen(process.env.PORT)
+  console.log(JSON.stringify(request.body))
+}).listen(process.env.PORT || 3000)
   
-  await app.start(process.env.PORT || 3000);
-  console.log('⚡️ Bolt app is running!');
+  /*await app.start(process.env.PORT || 3000);
+  console.log('⚡️ Bolt app is running!');*/
 })();
 
