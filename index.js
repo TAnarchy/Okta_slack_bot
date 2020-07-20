@@ -76,9 +76,12 @@ app.message('update', async ({ message, say }) => {
     }
 });
 
+exports.processData=(incoming_text)=>{
+  var command = imcoming_text.split(" ")
+}
 
 // Start your app
-/*http.createServer(function(request, response) {
+http.createServer(function(request, response) {
   response.writeHead(200, {"Content-Type": "text/plain"});
   response.write("Hello World");
   response.end();
@@ -89,13 +92,14 @@ app.message('update', async ({ message, say }) => {
   });
   
   request.on('end', () => {
-    console.log("Data: "+JSON.stringify(data)) // 'Buy the milk'
+   try{
+    console.log(JSON.parse(data[0]).event.text) // 'Buy the milk'
+   } catch(e){console.log("Request failed")}
   })
-}).listen(process.env.PORT || 3000)*/
-
-(async () => {
+}).listen(process.env.PORT || 3000)
+/*(async () => {
   
   await app.start(process.env.PORT || 3000);
   console.log('⚡️ Bolt app is running!');
-})();
+})();*/
 
