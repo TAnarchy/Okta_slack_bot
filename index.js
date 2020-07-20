@@ -3,6 +3,7 @@ const store = require('./store');
 const okta_connect = require('./okta_connector')
 const helper = require('./helper');
 const bot_token=process.env.SLACK_BOT_TOKEN
+const http = require('http')
 const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   token: process.env.SLACK_BOT_TOKEN
@@ -75,7 +76,29 @@ app.message('update', async ({ message, say }) => {
 
 // Start your app
 (async () => {
-  await app.start(process.env.PORT || 3000);
-  console.log('⚡️ Bolt app is running!');
+  
+  http.createServer(function(request, response) {
+  response.writeHead(200, {"Content-Type": "text/plain"});
+  response.write("Hello World");
+  response.end();
+  
+  let data=[]
+   request.on('data', chunk => {
+    data.push(chunk.toString())
+  });
+  
+  request.on('end', () => {
+   try{
+     var text=JSON.parse(data[0]).event.text
+   // console.log("text sent: "+text)
+     helper.processData(text)
+   } catch(e){//console.log("Request failed")
+             }
+  })
+}).listen(process.env.PORT || 3000)
+  
+  
+ /* await app.start(process.env.PORT || 3000);
+  console.log('⚡️ Bolt app is running!');*/
 })();
 
