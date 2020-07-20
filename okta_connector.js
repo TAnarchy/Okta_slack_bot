@@ -16,10 +16,13 @@ exports.parseUsers = (val) => {
 
 
 exports.getUsers =(auth,back_channel,extra,queryParams) =>{
+  console.log("Auth here is: "+auth.length)
+  auth.map
   try{
+    
     then_request("GET",okta_url+okta_path,{
       headers :{
-        'Authorization':auth["okta"]
+        'Authorization':auth[0]
       }
     }).done((res)=>{
       if(extra=="list")
@@ -44,14 +47,15 @@ exports.getUsers =(auth,back_channel,extra,queryParams) =>{
 exports.createUser=(auth,params,back_channel) =>{
   
   try{
+    console.log("Token here is: "+JSON.stringify(auth))
     console.log("Incoming params: "+params)
   let user_profile=exports.generate_profile(params.trim())
   //slack_call.postMessageTestWithText("User Profile "+JSON.stringify(user_profile),"D017PG3NAKT")
   console.log("User Profile "+JSON.stringify(user_profile))
-console.log("Token sent is: "+auth["okta"])
+console.log("Token sent is: "+auth[0])
     then_request("POST",okta_url+okta_path+"?activate=false",{
       headers :{
-        'Authorization':auth["okta"]
+        'Authorization':auth[0]
       },
       json :{
         'profile':user_profile.profile
@@ -194,7 +198,7 @@ exports.updateResponseQuery =(user_list,auth,back_channel,query_params)=>{
     console.log("PUt profile:"+JSON.stringify(queried_user.profile))
     then_request("PUT",okta_url+okta_path+"/"+queried_user_id,{
       headers :{
-        'Authorization':auth["okta"]
+        'Authorization':auth[0]
       },
       json :{
         'profile':queried_user.profile

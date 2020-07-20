@@ -30,15 +30,15 @@ app.message('list', async ({ message, say }) => {
    }
   else
     {
+      console.log("List token is: "+store.getOktaToken())
       var userList = okta_connect.getUsers(store.getOktaToken(),message.channel,"list")
     }
 });
 
 app.message('token', async ({ message, say }) => {
   var tokenPart=message.text.split("=")[1]
-  var tokenObject={"okta":"SSWS "+tokenPart.split(",")[0],"bot":tokenPart.split(",")[1],"secret":tokenPart.split(",")[2]}
-  store.setOktaToken(tokenObject)
-  say(`Tokens set to: ${JSON.stringify(store.getOktaToken())}`) 
+  store.setOktaToken(tokenPart)
+  say(`Tokens set to: ${store.getOktaToken()}`) 
 });
 
 app.message('create', async ({ message, say }) => {
@@ -47,7 +47,8 @@ app.message('create', async ({ message, say }) => {
       say(`Please enter a valid Okta Token`) 
    }
   else
-    {
+    { 
+      console.log("Token present: "+store.getOktaToken())
       var userList = okta_connect.createUser(store.getOktaToken(),message.text,message.channel)
     }
 });
