@@ -9,6 +9,10 @@ const slack_call = require('./slack_callback')
 var returnValue="";
 
 
+exports.removeCommand= (command_array) =>{
+    command_array.shift()
+  return command_array
+}
 
 exports.parseUsers = (val) => {
   returnValue=returnValue+val.profile.firstName+" "+val.profile.lastName+" "+val.profile.email+"\n" 
@@ -77,7 +81,7 @@ exports.generate_profile_query=(kvp_string)=>{
   console.log("KVP STRING IS: "+kvp_string)
   let arr=kvp_string.split(split_character).join(',').split(" ").join(',').split(",")
   console.log("ARray is: "+arr)
-  arr.shift()
+  arr=exports.removeCommand(arr)
   return arr
 }
 
@@ -88,7 +92,7 @@ exports.generate_profile=(kvp_string)=>{
   console.log("KVP STRING IS: "+kvp_string)
   let arr=kvp_string.split(split_character).join(',').split(" ").join(',').split(",")
   console.log("ARray is: "+arr)
-  arr.shift()
+  arr=exports.removeCommand(arr)
   
   
   arr.push("login="+arr[0])
@@ -105,7 +109,7 @@ exports.generate_profile_update=(kvp_string)=>{
   console.log("KVP STRING IS: "+kvp_string)
   let arr=kvp_string.split(split_character).join(',').split(" ").join(',').split(",")
   console.log("ARray is: "+arr)
-  arr.shift()
+  arr=exports.removeCommand(arr)
   var email=arr.shift()
   let table = arr.map(pair => pair.split("="))
   let result={}
