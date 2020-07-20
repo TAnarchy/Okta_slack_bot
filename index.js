@@ -80,7 +80,7 @@ app.message('update', async ({ message, say }) => {
 (async () => {
   
   
-/*http.createServer(function(request, response) {
+http.createServer(function(request, response) {
   response.writeHead(200, {"Content-Type": "text/plain"});
   response.write("Hello World");
   response.end();
@@ -93,9 +93,9 @@ app.message('update', async ({ message, say }) => {
   request.on('end', () => {
     console.log("Data: "+JSON.stringify(data)) // 'Buy the milk'
   })
-}).listen(process.env.PORT || 3000)*/
+}).listen(process.env.PORT || 3000)
   
-  await app.start(process.env.PORT || 3000);
-  console.log('⚡️ Bolt app is running!');
+  /*await app.start(process.env.PORT || 3000);
+  console.log('⚡️ Bolt app is running!');*/
 })();
 
