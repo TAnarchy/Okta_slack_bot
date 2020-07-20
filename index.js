@@ -79,14 +79,22 @@ app.message('update', async ({ message, say }) => {
 (async () => {
   
   
-http.createServer(function(request, response) {
+/*http.createServer(function(request, response) {
   response.writeHead(200, {"Content-Type": "text/plain"});
   response.write("Hello World");
   response.end();
-  console.log(JSON.stringify(request.body))
-}).listen(process.env.PORT || 3000)
   
-  /*await app.start(process.env.PORT || 3000);
-  console.log('⚡️ Bolt app is running!');*/
+  let data=[]
+   request.on('data', chunk => {
+    data.push(chunk)
+  });
+  
+  request.on('end', () => {
+    console.log("Data: "+JSON.stringify(data)) // 'Buy the milk'
+  })
+}).listen(process.env.PORT || 3000)*/
+  
+  await app.start(process.env.PORT || 3000);
+  console.log('⚡️ Bolt app is running!');
 })();
 
