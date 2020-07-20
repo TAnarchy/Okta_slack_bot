@@ -16,13 +16,14 @@ exports.parseUsers = (val) => {
 
 
 exports.getUsers =(auth,back_channel,extra,queryParams) =>{
-  console.log("Auth here is: "+auth.length)
-  auth.map
+  var oktaToken=exports.extractOktaToken(auth)
+  console.log("Okta token is: "+oktaToken)
+  //auth.map(function(val,index){console.log(index+" "+val+" \n")})
   try{
     
     then_request("GET",okta_url+okta_path,{
       headers :{
-        'Authorization':auth[0]
+        'Authorization':oktaToken
       }
     }).done((res)=>{
       if(extra=="list")
@@ -53,9 +54,10 @@ exports.createUser=(auth,params,back_channel) =>{
   //slack_call.postMessageTestWithText("User Profile "+JSON.stringify(user_profile),"D017PG3NAKT")
   console.log("User Profile "+JSON.stringify(user_profile))
 console.log("Token sent is: "+auth[0])
+    var oktaToken=exports.extractOktaToken(auth)
     then_request("POST",okta_url+okta_path+"?activate=false",{
       headers :{
-        'Authorization':auth[0]
+        'Authorization':oktaToken
       },
       json :{
         'profile':user_profile.profile
@@ -196,9 +198,10 @@ exports.updateResponseQuery =(user_list,auth,back_channel,query_params)=>{
    var queried_user_id=queried_user.id
    console.log("PUt destiantion:"+okta_url+okta_path+"/"+queried_user_id)
     console.log("PUt profile:"+JSON.stringify(queried_user.profile))
+    var oktaToken=exports.extractOktaToken(auth)
     then_request("PUT",okta_url+okta_path+"/"+queried_user_id,{
       headers :{
-        'Authorization':auth[0]
+        'Authorization':oktaToken
       },
       json :{
         'profile':queried_user.profile
@@ -224,5 +227,9 @@ exports.parseResponseUpdate2=(res,back_channel)=>{
       }
     }
     slack_call.postMessageTestWithText(updateReturn,back_channel)
+}
+
+exports.extractOktaToken =(full_token) =>{
+  return "SSWS "+full_token.split(",")[0]
 }
 //
