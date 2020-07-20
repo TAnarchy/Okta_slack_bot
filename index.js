@@ -3,6 +3,7 @@ const store = require('./store');
 const okta_connect = require('./okta_connector')
 const helper = require('./helper');
 const bot_token=process.env.SLACK_BOT_TOKEN
+const test=1
 const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   token: process.env.SLACK_BOT_TOKEN
