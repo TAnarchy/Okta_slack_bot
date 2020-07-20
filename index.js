@@ -11,7 +11,7 @@ const app = new App({
   token: process.env.SLACK_BOT_TOKEN
 });
 
-
+//app.token="3423423"
 app.event('app_home_opened', ({ event, say }) => {  
   // Look up the user from DB
 
@@ -38,6 +38,7 @@ app.message('list', async ({ message, say }) => {
 });
 
 app.message('token', async ({ message, say }) => {
+  console.log("token is: "+app.token)
   store.setOktaToken("SSWS "+message.text.split('=')[1])
   say(`Okta Token set successfully to: ${store.getOktaToken()}`) 
 });
@@ -77,7 +78,7 @@ app.message('update', async ({ message, say }) => {
 
 
 // Start your app
-(async () => {http.createServer(function(request, response) {
+/*http.createServer(function(request, response) {
   response.writeHead(200, {"Content-Type": "text/plain"});
   response.write("Hello World");
   response.end();
@@ -90,7 +91,7 @@ app.message('update', async ({ message, say }) => {
   request.on('end', () => {
     console.log("Data: "+JSON.stringify(data)) // 'Buy the milk'
   })
-}).listen(process.env.PORT || 3000)})
+}).listen(process.env.PORT || 3000)*/
 
 (async () => {
   
