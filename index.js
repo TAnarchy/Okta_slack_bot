@@ -76,13 +76,18 @@ app.message('update', async ({ message, say }) => {
 
 // Start your app
 
+exports.getInputCommand = (input_data) =>{
+    return input_data.substr(0,6)
+}
+
 exports.processData = (input_data,back_channel) =>{
   console.log("input data is"+input_data+" command ended")
-  var command = input_data.split(" ")[0]
+  var command = exports.getInputCommand(input_data).trim()
   var value = input_data.split(" ")[1]
   console.log("command is"+command+" command ended")
-  if (command =="token")
+  if (command.trim() =="token")
     {
+      console.log("In token")
       value=value.split(",")
       store.setOktaToken("SSWS "+value[0])
       store.setBotToken(value[1])
@@ -98,6 +103,16 @@ exports.processData = (input_data,back_channel) =>{
     {
       console.log("creating")
       var userList = okta_connect.createUser(store.getOktaToken(),input_data,back_channel)
+    }
+  else if (command.trim()=="query")
+    {
+      console.log("creating")
+      var userList = okta_connect.queryUsers(store.getOktaToken(),input_data,back_channel)
+    }
+   else if (command.trim()=="update")
+    {
+      console.log("creating")
+      var userList = okta_connect.updateUser(store.getOktaToken(),input_data,back_channel)
     }
 }
 
