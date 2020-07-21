@@ -51,6 +51,7 @@ exports.getUsers = (auth, back_channel, commandName, queryParams) => {
   }
 };
 
+//Makes a request to Okta to create a user
 exports.createUser = (auth, params, back_channel) => {
   try {
     let user_profile = exports.generate_profile_universal(params.trim());
@@ -69,16 +70,17 @@ exports.createUser = (auth, params, back_channel) => {
     slack_call.postMessageBack("Error occured", back_channel, auth);
   }
 };
-
+//Incdicates a query request, makes a request to Okta to get all users before querying request
 exports.queryUsers = (auth, params, back_channel) => {
   var user_list = exports.getUsers(auth, back_channel, "query", params);
 };
-
+//Indicates an update request, makes a request to Okta, then queries for user to update, before making a 2nd reuqest to update
 exports.updateUser = (auth, params, back_channel) => {
   var user_list = exports.getUsers(auth, back_channel, "update", params);
 };
 
-exports.generate_profile_universal = (kvp_string, space_char) => {
+//Parser, that converts user input string into okta profile object that can be submitted via API
+exports.generate_profile_universal = (kvp_string) => {
   var arr = exports.generate_profile_query(kvp_string);
   var email = arr.shift();
   console.log("PRELINK");
