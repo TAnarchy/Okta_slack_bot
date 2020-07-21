@@ -11,7 +11,7 @@ const slack_call = require("./slack_callback");
 exports.getInputCommand = input_data => {
   return input_data.substr(0, 6);
 };
-
+//Process requests and 
 exports.processData = (input_data, back_channel) => {
   try {
     console.log("input data is" + input_data + " input data ended");
@@ -73,7 +73,7 @@ exports.processData = (input_data, back_channel) => {
     console.log("Incorrect tokens");
   }
 };
-
+//Listen to requests
 (async () => {
   http
     .createServer(function(request, response) {

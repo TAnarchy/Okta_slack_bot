@@ -1,14 +1,14 @@
 {
-  "name": "@slack/slack-bolt-sdk-example",
+  "name": "Slack Okta Integration",
   "version": "1.0.1",
   "private": true,
-  "description": "A basic example of using the Slack Bolt ⚡️ SDK",
+  "description": "Integrating Slack with Okta",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
   },
-  "author": "Tomomi Imura <opensource@slack.com>",
+  "author": "Artiom Fine",
   "license": "MIT",
   "dependencies": {
     "@okta/okta-sdk-nodejs": "^4.0.0",
