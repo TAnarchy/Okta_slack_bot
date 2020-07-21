@@ -5,6 +5,7 @@ let users = {}
 let me = undefined
 let defaultChannel = undefined
 let oktaToken = undefined
+let bot
 
 exports.getMessages = () => {
   return messages
