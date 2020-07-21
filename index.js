@@ -1,23 +1,21 @@
-const { App } = require("@slack/bolt");
 const store = require("./store");
-const okta_connect = require("./okta_connector");
-const bot_token = process.env.SLACK_BOT_TOKEN;
+const oktaConnect = require("./okta_connector");
 const http = require("http");
 const oktaTokenConst = "oktaToken";
 const botTokenConst = "botToken";
 const signedSecretConst = "signedSecret";
-const slack_call = require("./slack_callback");
+const slackCall = require("./slack_callback");
 
 //get Command from input
-exports.getInputCommand = input_data => {
-  return input_data.substr(0, 6);
+exports.getInputCommand = inputData => {
+  return inputData.substr(0, 6);
 };
 //Process requests and call appropriate okta command
-exports.processData = (input_data, back_channel) => {
+exports.processData = (inputData, backChannel) => {
   try {
-    console.log("input data is" + input_data + " input data ended");
-    var command = exports.getInputCommand(input_data).trim();
-    var value = input_data.split(" ")[1];
+    console.log("input data is" + inputData + " input data ended");
+    var command = exports.getInputCommand(inputData).trim();
+    var value = inputData.split(" ")[1];
     console.log("command is" + command + " command ended");
     if (command.trim() == "token") {
       value = value.split(",");
@@ -36,38 +34,38 @@ exports.processData = (input_data, back_channel) => {
       store.setSlackSecret(value[2]);
       console.log("Token set: " + value[0]);
       var returnValue = "Tokens set successfully";
-      slack_call.postMessageBack(
+      slackCall.postMessageBack(
         returnValue,
-        back_channel,
+        backChannel,
         store.getGlobalToken()
       );
     } else if (command == "list") {
-      console.log("Channel is: " + back_channel);
-      var userList = okta_connect.getUsers(
+      console.log("Channel is: " + backChannel);
+      var userList = oktaConnect.getUsers(
         store.getGlobalToken(),
-        back_channel,
+        backChannel,
         "list"
       );
     } else if (command == "create") {
       console.log("creating");
-      var userList = okta_connect.createUser(
+      var userList = oktaConnect.createUser(
         store.getGlobalToken(),
-        input_data,
-        back_channel
+        inputData,
+        backChannel
       );
     } else if (command.trim() == "query") {
       console.log("creating");
-      var userList = okta_connect.queryUsers(
+      var userList = oktaConnect.queryUsers(
         store.getGlobalToken(),
-        input_data,
-        back_channel
+        inputData,
+        backChannel
       );
     } else if (command.trim() == "update") {
       console.log("creating");
-      var userList = okta_connect.updateUser(
+      var userList = oktaConnect.updateUser(
         store.getGlobalToken(),
-        input_data,
-        back_channel
+        inputData,
+        backChannel
       );
     }
   } catch (e) {

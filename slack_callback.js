@@ -3,7 +3,7 @@ const oktaTokenConst = "oktaToken";
 const botTokenConst = "botToken";
 const signedSecretConst = "signedSecret";
 
-exports.postMessageBack = async (text, back_channel, auth) => {
+exports.postMessageBack = async (text, backChannel, auth) => {
   try {
     const slackApp = new App({
       signingSecret: auth[signedSecretConst],
@@ -12,7 +12,7 @@ exports.postMessageBack = async (text, back_channel, auth) => {
 
     const result = await slackApp.client.chat.postMessage({
       token: auth[botTokenConst],
-      channel: back_channel,
+      channel: backChannel,
       text: text
     });
   } catch (e) {

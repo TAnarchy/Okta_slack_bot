@@ -1,7 +1,6 @@
 const https = require("https");
 const store = require("./store");
 const oktaURL = process.env.oktaURL;
-const oktaToken = process.env.oktaToken;
 const oktaPath = process.env.oktaPath;
 const okta = require("@okta/okta-sdk-nodejs");
 const thenRequest = require("then-request");
@@ -94,11 +93,7 @@ exports.parseResponse = (response, backChannel, auth) => {
     var utf8Response = JSON.parse(response.getBody("utf-8"));
     if (utf8Response.errorSummary != undefined) {
       slackCall.postMessageBack(returnValue, backChannel, auth);
-      slackCall.postMessageBack(
-        utf8Response.errorSummary,
-        backChannel,
-        auth
-      );
+      slackCall.postMessageBack(utf8Response.errorSummary, backChannel, auth);
     } else {
       returnValue = "";
       utf8Response.map(exports.parseUsers);
@@ -114,15 +109,9 @@ exports.parseResponseCreate = (response, backChannel, auth) => {
   try {
     console.log("definitely caught error" + JSON.stringify(response));
     var utf8Response = JSON.parse(response.getBody("utf-8"));
-    console.log(
-      "definitely caught error again" + JSON.stringify(utf8Response)
-    );
+    console.log("definitely caught error again" + JSON.stringify(utf8Response));
     if (utf8Response.errorSummary != undefined) {
-      slackCall.postMessageBack(
-        utf8Response.errorSummary,
-        backChannel,
-        auth
-      );
+      slackCall.postMessageBack(utf8Response.errorSummary, backChannel, auth);
     } else {
       let createReturn = "[Creation Successful]\n";
       for (const property in utf8Response.profile) {
@@ -181,9 +170,7 @@ exports.updateResponseQuery = (userList, auth, backChannel, queryParams) => {
       queriedUser.profile[property] = searchParamsResult.profile[property];
     }
     var queriedUserId = queriedUser.id;
-    console.log(
-      "PUt destiantion:" + oktaURL + oktaPath + "/" + queriedUserId
-    );
+    console.log("PUt destiantion:" + oktaURL + oktaPath + "/" + queriedUserId);
     console.log("PUt profile:" + JSON.stringify(queriedUser.profile));
     thenRequest("PUT", oktaURL + oktaPath + "/" + queriedUserId, {
       headers: {
