@@ -293,7 +293,8 @@ exports.parseResponseUpdate2 = (res, back_channel, auth) => {
   //slack_call.postMessageTestWithText(updateReturn,back_channel)
   slack_call.postMessageBack(updateReturn, back_channel, auth);
 };
-//
+
+//Slack automatically hyerplinks E-mails, parses E-mail from hyperlink
 exports.deLinkEmail = email => {
   var returnEmail = email;
   if (email.includes("mailto")) {
