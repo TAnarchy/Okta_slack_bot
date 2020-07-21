@@ -6,18 +6,18 @@ const okta_path = process.env.OKTA_PATH;
 const okta = require("@okta/okta-sdk-nodejs");
 const then_request = require("then-request");
 const slack_call = require("./slack_callback");
-const first_space_position = 6;
-const fitst_space_position_query = 5;
 const oktaTokenConst = "oktaToken";
 const botTokenConst = "botToken";
 const signedSecretConst = "signedSecret";
 var returnValue = "";
 
+//In incoming bot string, recoves the command name as it is no longer necessary
 exports.removeCommand = command_array => {
   command_array.shift();
   return command_array;
 };
 
+//Parses firstName, lastName, and eMail from returned user values
 exports.parseUsers = val => {
   returnValue =
     returnValue +
@@ -29,7 +29,8 @@ exports.parseUsers = val => {
     "\n";
 };
 
-exports.getUsers = (auth, back_channel, extra, queryParams) => {
+//Makes a request to Okta, to return all users
+exports.getUsers = (auth, back_channel, commandName, queryParams) => {
   try {
     console.log("Token to be passed: " + auth[oktaTokenConst]);
     then_request("GET", okta_url + okta_path, {
@@ -37,11 +38,11 @@ exports.getUsers = (auth, back_channel, extra, queryParams) => {
         Authorization: auth[oktaTokenConst]
       }
     }).done(res => {
-      if (extra == "list") {
+      if (commandName == "list") {
         exports.parseResponse(res, back_channel, auth);
-      } else if (extra == "query") {
+      } else if (commandName == "query") {
         exports.parseResponseQuery(res, back_channel, queryParams, auth);
-      } else if (extra == "update") {
+      } else if (commandName == "update") {
         exports.updateResponseQuery(res, auth, back_channel, queryParams, auth);
       }
     });
@@ -52,8 +53,7 @@ exports.getUsers = (auth, back_channel, extra, queryParams) => {
 
 exports.createUser = (auth, params, back_channel) => {
   try {
-
-    let user_profile=exports.generate_profile_universal(params.trim())
+    let user_profile = exports.generate_profile_universal(params.trim());
 
     then_request("POST", okta_url + okta_path + "?activate=false", {
       headers: {
@@ -79,9 +79,7 @@ exports.updateUser = (auth, params, back_channel) => {
 };
 
 exports.generate_profile_universal = (kvp_string, space_char) => {
-  var arr=kvp_string.split(/\s+/)
-  console.log("ARray is: " + arr);
-  arr = exports.removeCommand(arr);
+  var arr = exports.generate_profile_query(kvp_string);
   var email = arr.shift();
   console.log("PRELINK");
   email = exports.deLinkEmail(email);
@@ -94,7 +92,6 @@ exports.generate_profile_universal = (kvp_string, space_char) => {
   result.profile["login"] = email;
   return result;
 };
-
 
 exports.parseResponse = (response, back_channel, auth) => {
   try {
@@ -109,7 +106,6 @@ exports.parseResponse = (response, back_channel, auth) => {
     } else {
       returnValue = "";
       utf8_response.map(exports.parseUsers);
-      //slack_call.postMessageTestWithText(returnValue,back_channel)
       slack_call.postMessageBack(returnValue, back_channel, auth);
     }
   } catch (e) {
@@ -125,7 +121,6 @@ exports.parseResponseCreate = (response, back_channel, auth) => {
       "definitely caught error again" + JSON.stringify(utf8_response)
     );
     if (utf8_response.errorSummary != undefined) {
-      //slack_call.postMessageTestWithText(utf8_response.errorSummary,back_channel)
       slack_call.postMessageBack(
         utf8_response.errorSummary,
         back_channel,
@@ -135,15 +130,12 @@ exports.parseResponseCreate = (response, back_channel, auth) => {
       let createReturn = "[Creation Successful]\n";
       for (const property in utf8_response.profile) {
         if (utf8_response.profile[property] != null) {
-          //  say(`Okta Token set successfully to: ${store.getOktaToken()}`)
           createReturn += `${property}: ${utf8_response.profile[property]} \n`;
         }
       }
-      //slack_call.postMessageTestWithText(createReturn,back_channel)
       slack_call.postMessageBack(createReturn, back_channel, auth);
     }
   } catch (e) {
-    // slack_call.postMessageTestWithText("Okta responded with an error, make sure values are correct and the user hasn't alreadybeen created",back_channel)
     slack_call.postMessageBack(
       "Okta responded with an error, make sure values are correct and the user hasn't alreadybeen created",
       back_channel,
@@ -154,9 +146,9 @@ exports.parseResponseCreate = (response, back_channel, auth) => {
 
 exports.parseResponseQuery = (user_list, back_channel, query_params, auth) => {
   try {
-     var search_params_array=exports.generate_profile_query(query_params)
-    var user_list_body=JSON.parse(user_list.getBody("utf-8"))
-    var e_mail= search_params_array.shift()
+    var search_params_array = exports.generate_profile_query(query_params);
+    var user_list_body = JSON.parse(user_list.getBody("utf-8"));
+    var e_mail = search_params_array.shift();
     var normalize_email = exports.deLinkEmail(e_mail);
     console.log("normalized_email: " + normalize_email);
     console.log(user_list_body);
@@ -168,27 +160,23 @@ exports.parseResponseQuery = (user_list, back_channel, query_params, auth) => {
       element =>
         (toReturnQuery += `${element}: ${queried_user.profile[element]}\n`)
     );
-    //slack_call.postMessageTestWithText(toReturnQuery,back_channel)
     slack_call.postMessageBack(toReturnQuery, back_channel, auth);
   } catch (e) {
-    //slack_call.postMessageTestWithText("Query failed",back_channel)
     slack_call.postMessageBack("Query failed", back_channel, auth);
   }
 };
 
-exports.generate_profile_query=(kvp_string)=>{
-  var split_character=kvp_string.charAt(5)
-  console.log("KVP STRING IS: "+kvp_string)
-  let arr=kvp_string.split(split_character).join(',').split(" ").join(',').split(",")
-  console.log("ARray is: "+arr)
-  arr.shift()
-  return arr
-}
+exports.generate_profile_query = kvp_string => {
+  var arr = kvp_string.split(/\s+/);
+  console.log("ARray is: " + arr);
+  arr = exports.removeCommand(arr);
+  return arr;
+};
 
 exports.updateResponseQuery = (user_list, auth, back_channel, query_params) => {
   try {
-    var search_params_result = exports.generate_profile_universal(query_params)
-    var e_mail = search_params_result.profile.email
+    var search_params_result = exports.generate_profile_universal(query_params);
+    var e_mail = search_params_result.profile.email;
     var user_list_body = JSON.parse(user_list.getBody("utf-8"));
 
     var queried_user = user_list_body.filter(obj =>
@@ -213,26 +201,20 @@ exports.updateResponseQuery = (user_list, auth, back_channel, query_params) => {
       exports.parseResponseUpdate2(res, back_channel, auth);
     });
 
-    //slack_call.postMessageTestWithText("Update successful",back_channel)
     slack_call.postMessageBack("Update successful", back_channel, auth);
   } catch (e) {
-    //slack_call.postMessageTestWithText("Query failed",back_channel)
     slack_call.postMessageBack("Query failed", back_channel, auth);
   }
 };
 
 exports.parseResponseUpdate2 = (res, back_channel, auth) => {
-  // slack_call.postMessageTestWithText("At Update 2",back_channel)
-  slack_call.postMessageBack("At update 2", back_channel, auth);
   var utf8_response = JSON.parse(res.getBody("utf-8"));
   let updateReturn = "[Update Successful]\n";
   for (const property in utf8_response.profile) {
     if (utf8_response.profile[property] != null) {
-      //  say(`Okta Token set successfully to: ${store.getOktaToken()}`)
       updateReturn += `${property}: ${utf8_response.profile[property]} \n`;
     }
   }
-  //slack_call.postMessageTestWithText(updateReturn,back_channel)
   slack_call.postMessageBack(updateReturn, back_channel, auth);
 };
 
