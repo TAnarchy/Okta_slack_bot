@@ -186,6 +186,8 @@ exports.parseResponseCreate=(response,back_channel,auth)=>
   }
 }
 
+
+
 exports.parseResponseQuery =(user_list,back_channel,query_params,auth)=>{
   try{
    // var search_params_array=exports.generate_profile_universal(query_params,first_space_position)
@@ -257,3 +259,12 @@ exports.parseResponseUpdate2=(res,back_channel,auth)=>{
   slack_call.postMessageBack(updateReturn,back_channel,auth)
 }
 //
+exports.deLinkEmail=(email)=>{
+  var returnEmail=email
+    if(email.includes("mailto")){
+        email=email.split("|")[1]
+        email=email.replace(">","")
+        returnEmail=email
+    }
+    return returnEmail
+}
