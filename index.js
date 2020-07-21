@@ -77,9 +77,10 @@ app.message('update', async ({ message, say }) => {
 // Start your app
 
 exports.processData = (input_data,back_channel) =>{
+  console.log("input data is"+input_data+" command ended")
   var command = input_data.split(" ")[0]
   var value = input_data.split(" ")[1]
-  console.log("input data "+input_data.split(" ")[0])
+  console.log("command is"+command+" command ended")
   if (command =="token")
     {
       value=value.split(",")
