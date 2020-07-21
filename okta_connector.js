@@ -68,7 +68,7 @@ exports.createUser = (auth, params, back_channel) => {
       exports.parseResponseCreate(res, back_channel, auth);
     });
   } catch (e) {
-    slack_call.postMessageBack("Error occured", back_channel,auth);
+    slack_call.postMessageBack("Error occured", back_channel, auth);
   }
 };
 
@@ -124,9 +124,9 @@ exports.generate_profile = kvp_string => {
   /*arr.push("login="+arr[0])
   arr[0]="email="+arr[0]*/
   var email = arr.shift();
-  console.log("PRELINK")
-  email=exports.deLinkEmail(email)
-  console.log("Delnked email is: "+email)
+  console.log("PRELINK");
+  email = exports.deLinkEmail(email);
+  console.log("Delnked email is: " + email);
   let table = arr.map(pair => pair.split("="));
   let result = {};
   result.profile = {};
@@ -156,21 +156,24 @@ exports.generate_profile_update = kvp_string => {
 };
 
 exports.parseResponse = (response, back_channel, auth) => {
-  try{
-  var utf8_response = JSON.parse(response.getBody("utf-8"));
-  if (utf8_response.errorSummary != undefined) {
-    slack_call.postMessageBack(returnValue, back_channel, auth);
-    slack_call.postMessageBack(utf8_response.errorSummary, back_channel, auth);
-  } else {
-    returnValue = "";
-    utf8_response.map(exports.parseUsers);
-    //slack_call.postMessageTestWithText(returnValue,back_channel)
-    slack_call.postMessageBack(returnValue, back_channel, auth);
+  try {
+    var utf8_response = JSON.parse(response.getBody("utf-8"));
+    if (utf8_response.errorSummary != undefined) {
+      slack_call.postMessageBack(returnValue, back_channel, auth);
+      slack_call.postMessageBack(
+        utf8_response.errorSummary,
+        back_channel,
+        auth
+      );
+    } else {
+      returnValue = "";
+      utf8_response.map(exports.parseUsers);
+      //slack_call.postMessageTestWithText(returnValue,back_channel)
+      slack_call.postMessageBack(returnValue, back_channel, auth);
+    }
+  } catch (e) {
+    slack_call.postMessageBack("Error occurred", back_channel, auth);
   }
-  } catch(e)
-    {
-      slack_call.postMessageBack("Error occurred", back_channel, auth);
-}
 };
 
 exports.parseResponseCreate = (response, back_channel, auth) => {
@@ -243,7 +246,7 @@ exports.updateResponseQuery = (user_list, auth, back_channel, query_params) => {
     var email_and_search = exports.generate_profile_update(query_params);
     var search_params_result = email_and_search["result"];
     var e_mail = email_and_search["e_mail"];
-    var e_mail=exports.deLinkEmail(e_mail)
+    var e_mail = exports.deLinkEmail(e_mail);
     var user_list_body = JSON.parse(user_list.getBody("utf-8"));
 
     var queried_user = user_list_body.filter(obj =>

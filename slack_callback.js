@@ -3,8 +3,6 @@ const oktaTokenConst = "oktaToken";
 const botTokenConst = "botToken";
 const signedSecretConst = "signedSecret";
 
-
-
 exports.postMessageBack = async (text, back_channel, auth) => {
   try {
     const slackApp = new App({
