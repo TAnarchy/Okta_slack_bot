@@ -11,12 +11,6 @@ const botTokenConst = "botToken";
 const signedSecretConst = "signedSecret";
 var returnValue = "";
 
-//In incoming bot string, recoves the command name as it is no longer necessary
-exports.removeCommand = command_array => {
-  command_array.shift();
-  return command_array;
-};
-
 //Parses firstName, lastName, and eMail from returned user values
 exports.parseUsers = val => {
   returnValue =
@@ -171,10 +165,7 @@ exports.parseResponseQuery = (user_list, back_channel, query_params, auth) => {
 };
 //parser that converts input paramters and values into an array
 exports.generate_profile_query = kvp_string => {
-  var arr = kvp_string.split(/\s+/).slice(1);
- /* console.log("ARray is: " + arr);
-  arr = exports.removeCommand(arr);*/
-  return arr;
+  return kvp_string.split(/\s+/).slice(1);
 };
 //first callback function for 'update', queries all users by E-mail, and makes 2nd reuqest to update
 exports.updateResponseQuery = (user_list, auth, back_channel, query_params) => {
