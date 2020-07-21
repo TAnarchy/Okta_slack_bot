@@ -68,7 +68,7 @@ exports.createUser = (auth, params, back_channel) => {
       exports.parseResponseCreate(res, back_channel, auth);
     });
   } catch (e) {
-    slack_call.postMessageTestWithText(e, back_channel);
+    slack_call.postMessageBack("Error occured", back_channel,auth);
   }
 };
 
@@ -156,6 +156,7 @@ exports.generate_profile_update = kvp_string => {
 };
 
 exports.parseResponse = (response, back_channel, auth) => {
+  try{
   var utf8_response = JSON.parse(response.getBody("utf-8"));
   if (utf8_response.errorSummary != undefined) {
     slack_call.postMessageBack(returnValue, back_channel, auth);
@@ -166,6 +167,10 @@ exports.parseResponse = (response, back_channel, auth) => {
     //slack_call.postMessageTestWithText(returnValue,back_channel)
     slack_call.postMessageBack(returnValue, back_channel, auth);
   }
+  } catch(e)
+    {
+      slack_call.postMessageBack("Error occurred", back_channel, auth);
+}
 };
 
 exports.parseResponseCreate = (response, back_channel, auth) => {

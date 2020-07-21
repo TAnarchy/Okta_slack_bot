@@ -14,6 +14,7 @@ exports.getInputCommand = input_data => {
 };
 
 exports.processData = (input_data, back_channel) => {
+  try{
   console.log("input data is" + input_data + " input data ended");
   var command = exports.getInputCommand(input_data).trim();
   var value = input_data.split(" ")[1];
@@ -68,6 +69,9 @@ exports.processData = (input_data, back_channel) => {
       input_data,
       back_channel
     );
+  }
+  }catch(e){
+    console.log("Incorrect tokens")
   }
 };
 

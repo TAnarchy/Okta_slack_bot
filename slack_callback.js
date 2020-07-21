@@ -18,6 +18,6 @@ exports.postMessageBack = async (text, back_channel, auth) => {
       text: text
     });
   } catch (e) {
-    console.log(e);
+    console.log("Unable to send message back");
   }
 };
