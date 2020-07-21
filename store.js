@@ -7,6 +7,7 @@ let defaultChannel = undefined
 let oktaToken = undefined
 let botToken=undefined
 let slackSecret=undefined
+let globalToken=undefined
 
 exports.getMessages = () => {
   return messages
@@ -58,4 +59,12 @@ exports.setSlackSecret=(token)=>{
 
 exports.getSlackSecret=(token)=>{
   return slackSecret
+}
+
+exports.getGlobalToken=(token)=>{
+  globalToken=token
+}
+
+exports.setGlobalToken=(token)=>{
+  return globalToken
 }

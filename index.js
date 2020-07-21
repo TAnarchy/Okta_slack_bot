@@ -87,6 +87,8 @@ exports.processData = (input_data,back_channel) =>{
   console.log("command is"+command+" command ended")
   if (command.trim() =="token")
     {
+      var glToken={}
+      
       console.log("In token")
       value=value.split(",")
       store.setOktaToken("SSWS "+value[0])
