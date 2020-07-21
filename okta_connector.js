@@ -74,7 +74,7 @@ exports.updateUser = (auth, params, back_channel) => {
 };
 
 //Parser, that converts user input string into okta profile object that can be submitted via API
-exports.generate_profile_universal = (kvp_string) => {
+exports.generate_profile_universal = kvp_string => {
   var arr = exports.generate_profile_query(kvp_string);
   var email = arr.shift();
   console.log("PRELINK");
@@ -217,8 +217,8 @@ exports.parseResponseUpdate2 = (res, back_channel, auth) => {
 exports.deLinkEmail = email => {
   var returnEmail = email;
   if (email.includes("mailto")) {
-    email = email.split("|")[1];
-    email = email.replace(">", "");
+    email = email.split(":")[1];
+    email = email.split("|")[0];
     returnEmail = email;
   }
   return returnEmail;
