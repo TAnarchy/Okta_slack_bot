@@ -52,11 +52,8 @@ exports.getUsers = (auth, back_channel, extra, queryParams) => {
 
 exports.createUser = (auth, params, back_channel) => {
   try {
-    console.log("Incoming params: " + params);
-    let uni_arr=exports.generate_profile_universal(params.trim())
-    console.log("Uni arr is: "+uni_arr)
-    let user_profile=exports.generate_profile_create(uni_arr)
-    console.log("User Profile " + JSON.stringify(user_profile));
+
+    let user_profile=exports.generate_profile_universal(params.trim())
 
     then_request("POST", okta_url + okta_path + "?activate=false", {
       headers: {
@@ -98,26 +95,6 @@ exports.generate_profile_universal = (kvp_string, space_char) => {
   return result;
 };
 
-
-
-exports.generate_profile_create = arr => {
-  var email = arr.shift();
-  console.log("PRELINK");
-  email = exports.deLinkEmail(email);
-  console.log("Delnked email is: " + email);
-  let table = arr.map(pair => pair.split("="));
-  let result = {};
-  result.profile = {};
-  table.forEach(([key, value]) => (result.profile[key] = value));
-  result.profile["email"] = email;
-  result.profile["login"] = email;
-  return result;
-};
-
-
-exports.generate_profile_update = result => {
-  return { result: result, e_mail: result.profile.email };
-};
 
 exports.parseResponse = (response, back_channel, auth) => {
   try {
@@ -177,15 +154,9 @@ exports.parseResponseCreate = (response, back_channel, auth) => {
 
 exports.parseResponseQuery = (user_list, back_channel, query_params, auth) => {
   try {
-    // var search_params_array=exports.generate_profile_universal(query_params,first_space_position)
-    var search_params_array = exports.generate_profile_universal(
-      query_params,
-      first_space_position
-    );
-    var user_list_body = JSON.parse(user_list.getBody("utf-8"));
-    var e_mail = search_params_array.shift();
-    // var normalize_email=e_mail.split("|")[0]
-    //normalize_email=normalize_email.split(":")[1]
+     var search_params_array=exports.generate_profile_query(query_params)
+    var user_list_body=JSON.parse(user_list.getBody("utf-8"))
+    var e_mail= search_params_array.shift()
     var normalize_email = exports.deLinkEmail(e_mail);
     console.log("normalized_email: " + normalize_email);
     console.log(user_list_body);
@@ -204,6 +175,15 @@ exports.parseResponseQuery = (user_list, back_channel, query_params, auth) => {
     slack_call.postMessageBack("Query failed", back_channel, auth);
   }
 };
+
+exports.generate_profile_query=(kvp_string)=>{
+  var split_character=kvp_string.charAt(5)
+  console.log("KVP STRING IS: "+kvp_string)
+  let arr=kvp_string.split(split_character).join(',').split(" ").join(',').split(",")
+  console.log("ARray is: "+arr)
+  arr.shift()
+  return arr
+}
 
 exports.updateResponseQuery = (user_list, auth, back_channel, query_params) => {
   try {
