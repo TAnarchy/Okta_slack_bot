@@ -5,7 +5,8 @@ let users = {}
 let me = undefined
 let defaultChannel = undefined
 let oktaToken = undefined
-let bot
+let botToken=undefined
+let slackSecret=undefined
 
 exports.getMessages = () => {
   return messages
@@ -43,3 +44,18 @@ exports.getOktaToken=(token)=>{
   return oktaToken
 }
 
+exports.setBotToken=(token)=>{
+  botToken=token
+}
+
+exports.getBotToken=(token)=>{
+  return botToken
+}
+
+exports.setSlackSecret=(token)=>{
+  slackSecret=token
+}
+
+exports.getSlackSecret=(token)=>{
+  return slackSecret
+}

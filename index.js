@@ -84,7 +84,8 @@ exports.processData = (input_data) =>{
     {
       value=value.split(",")
       store.setOktaToken(value[0])
-      
+      store.setBotToken(value[1])
+      store.setSlackSecret(value[2])
       console.log("Token set: "+value[0])
     }
   else
@@ -95,7 +96,7 @@ exports.processData = (input_data) =>{
         }
       else
         {
-          console.log("Yes token "+store.getOktaToken())
+          console.log("Yes token "+store.getOktaToken()+" "+store.getBotToken()+" "+store.getSlackSecret())
         }
     }
 }
@@ -114,7 +115,8 @@ exports.processData = (input_data) =>{
   request.on('end', () => {
    try{
      var text=JSON.parse(data[0]).event.text
-   // console.log("text sent: "+text)
+     var channel=JSON.parse(data[0]).channel
+    console.log("text sent: "+data[0])
      exports.processData(text)
      
    } catch(e)
