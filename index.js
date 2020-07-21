@@ -76,28 +76,27 @@ app.message('update', async ({ message, say }) => {
 
 // Start your app
 
-exports.processData = (input_data) =>{
+exports.processData = (input_data,back_channel) =>{
   var command = input_data.split(" ")[0]
   var value = input_data.split(" ")[1]
   console.log("input data "+input_data.split(" ")[0])
   if (command =="token")
     {
       value=value.split(",")
-      store.setOktaToken(value[0])
+      store.setOktaToken("SSWS "+value[0])
       store.setBotToken(value[1])
       store.setSlackSecret(value[2])
       console.log("Token set: "+value[0])
     }
-  else
+  else if (command=="list")
     {
-      if (exports.tokenNotPresent)
-        {
-          console.log("No token")
-        }
-      else
-        {
-          console.log("Yes token "+store.getOktaToken()+" "+store.getBotToken()+" "+store.getSlackSecret())
-        }
+      console.log("Channel is: "+back_channel)
+      var userList = okta_connect.getUsers(store.getOktaToken(),back_channel,"list")
+    }
+  else if (command=="create")
+    {
+      console.log("creating")
+      var userList = okta_connect.createUser(store.getOktaToken(),input_data,back_channel)
     }
 }
 
@@ -115,9 +114,9 @@ exports.processData = (input_data) =>{
   request.on('end', () => {
    try{
      var text=JSON.parse(data[0]).event.text
-     var channel=JSON.parse(data[0]).channel
+     var channel=JSON.parse(data[0]).event.channel
     console.log("text sent: "+data[0])
-     exports.processData(text)
+     exports.processData(text,channel)
      
    } catch(e)
    {//console.log("Request failed")
