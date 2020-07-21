@@ -53,8 +53,9 @@ exports.getUsers = (auth, back_channel, extra, queryParams) => {
 exports.createUser = (auth, params, back_channel) => {
   try {
     console.log("Incoming params: " + params);
-    let user_profile = exports.generate_profile(params.trim());
-    //slack_call.postMessageTestWithText("User Profile "+JSON.stringify(user_profile),"D017PG3NAKT")
+    let uni_arr=exports.generate_profile_universal(params.trim())
+    console.log("Uni arr is: "+uni_arr)
+    let user_profile=exports.generate_profile_create(uni_arr)
     console.log("User Profile " + JSON.stringify(user_profile));
 
     then_request("POST", okta_url + okta_path + "?activate=false", {
@@ -84,23 +85,6 @@ exports.generate_profile_universal = (kvp_string, space_char) => {
   var arr=kvp_string.split(/\s+/)
   console.log("ARray is: " + arr);
   arr = exports.removeCommand(arr);
-  return arr;
-};
-
-exports.generate_profile_query = kvp_string => {
-  var arr=kvp_string.split(/\s+/)
-  console.log("ARray is: " + arr);
-  arr = exports.removeCommand(arr);
-  return arr;
-};
-
-exports.generate_profile = kvp_string => {
-  var arr=kvp_string.split(/\s+/)
-  console.log("ARray is: " + arr);
-  arr = exports.removeCommand(arr);
-
-  /*arr.push("login="+arr[0])
-  arr[0]="email="+arr[0]*/
   var email = arr.shift();
   console.log("PRELINK");
   email = exports.deLinkEmail(email);
@@ -114,15 +98,25 @@ exports.generate_profile = kvp_string => {
   return result;
 };
 
-exports.generate_profile_update = kvp_string => {
-  var arr=kvp_string.split(/\s+/)
-  arr = exports.removeCommand(arr);
+
+
+exports.generate_profile_create = arr => {
   var email = arr.shift();
+  console.log("PRELINK");
+  email = exports.deLinkEmail(email);
+  console.log("Delnked email is: " + email);
   let table = arr.map(pair => pair.split("="));
   let result = {};
   result.profile = {};
   table.forEach(([key, value]) => (result.profile[key] = value));
-  return { result: result, e_mail: email };
+  result.profile["email"] = email;
+  result.profile["login"] = email;
+  return result;
+};
+
+
+exports.generate_profile_update = result => {
+  return { result: result, e_mail: result.profile.email };
 };
 
 exports.parseResponse = (response, back_channel, auth) => {
@@ -184,7 +178,7 @@ exports.parseResponseCreate = (response, back_channel, auth) => {
 exports.parseResponseQuery = (user_list, back_channel, query_params, auth) => {
   try {
     // var search_params_array=exports.generate_profile_universal(query_params,first_space_position)
-    var search_params_array = exports.generate_profile_query(
+    var search_params_array = exports.generate_profile_universal(
       query_params,
       first_space_position
     );
@@ -213,10 +207,8 @@ exports.parseResponseQuery = (user_list, back_channel, query_params, auth) => {
 
 exports.updateResponseQuery = (user_list, auth, back_channel, query_params) => {
   try {
-    var email_and_search = exports.generate_profile_update(query_params);
-    var search_params_result = email_and_search["result"];
-    var e_mail = email_and_search["e_mail"];
-    var e_mail = exports.deLinkEmail(e_mail);
+    var search_params_result = exports.generate_profile_universal(query_params)
+    var e_mail = search_params_result.profile.email
     var user_list_body = JSON.parse(user_list.getBody("utf-8"));
 
     var queried_user = user_list_body.filter(obj =>
