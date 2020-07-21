@@ -15,6 +15,7 @@ index.js - this is the primary file, it listens to incoming requests and takes a
 okta_connector.js - this file handles all parsing and requests to Okta. Called by index.js
 slack_callback.js - Handles 'callbacks' to Slack
 store.js - maintains token global variables
+jasmine_tests.js - Unit tests for parsers
 
 Possible commands
 
