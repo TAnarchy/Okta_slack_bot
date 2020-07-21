@@ -84,12 +84,14 @@ exports.getInputCommand = (input_data) =>{
 }
 
 exports.processData = (input_data,back_channel) =>{
-  console.log("input data is"+input_data+" command ended")
+  console.log("input data is"+input_data+" input data ended")
   var command = exports.getInputCommand(input_data).trim()
   var value = input_data.split(" ")[1]
   console.log("command is"+command+" command ended")
   if (command.trim() =="token")
     {
+      
+      value=value.split(",")
       var glToken={}
       glToken[oktaTokenConst]="SSWS "+value[0]
       glToken[botTokenConst]=value[1]
@@ -98,7 +100,6 @@ exports.processData = (input_data,back_channel) =>{
       store.setGlobalToken(glToken)
       console.log("Global token saved isis: "+JSON.stringify(store.getGlobalToken()))
       console.log("In token")
-      value=value.split(",")
       store.setOktaToken("SSWS "+value[0])
       store.setBotToken(value[1])
       store.setSlackSecret(value[2])
@@ -112,17 +113,17 @@ exports.processData = (input_data,back_channel) =>{
   else if (command=="create")
     {
       console.log("creating")
-      var userList = okta_connect.createUser(store.getOktaToken(),input_data,back_channel)
+      var userList = okta_connect.createUser(store.getGlobalToken(),input_data,back_channel)
     }
   else if (command.trim()=="query")
     {
       console.log("creating")
-      var userList = okta_connect.queryUsers(store.getOktaToken(),input_data,back_channel)
+      var userList = okta_connect.queryUsers(store.getGlobalToken(),input_data,back_channel)
     }
    else if (command.trim()=="update")
     {
       console.log("creating")
-      var userList = okta_connect.updateUser(store.getOktaToken(),input_data,back_channel)
+      var userList = okta_connect.updateUser(store.getGlobalToken(),input_data,back_channel)
     }
 }
 
