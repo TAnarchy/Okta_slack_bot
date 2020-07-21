@@ -94,7 +94,7 @@ exports.generate_profile_universal = (kvp_string) => {
   result.profile["login"] = email;
   return result;
 };
-
+//Call back function for user 'list' command
 exports.parseResponse = (response, back_channel, auth) => {
   try {
     var utf8_response = JSON.parse(response.getBody("utf-8"));
@@ -115,6 +115,7 @@ exports.parseResponse = (response, back_channel, auth) => {
   }
 };
 
+//Callback function to 'create' command
 exports.parseResponseCreate = (response, back_channel, auth) => {
   try {
     console.log("definitely caught error" + JSON.stringify(response));
@@ -146,6 +147,7 @@ exports.parseResponseCreate = (response, back_channel, auth) => {
   }
 };
 
+//call back function for 'query' command
 exports.parseResponseQuery = (user_list, back_channel, query_params, auth) => {
   try {
     var search_params_array = exports.generate_profile_query(query_params);
@@ -167,14 +169,14 @@ exports.parseResponseQuery = (user_list, back_channel, query_params, auth) => {
     slack_call.postMessageBack("Query failed", back_channel, auth);
   }
 };
-
+//parser that converts input paramters and values into an array
 exports.generate_profile_query = kvp_string => {
   var arr = kvp_string.split(/\s+/);
   console.log("ARray is: " + arr);
   arr = exports.removeCommand(arr);
   return arr;
 };
-
+//first callback function for 'update', queries all users by E-mail, and makes 2nd reuqest to update
 exports.updateResponseQuery = (user_list, auth, back_channel, query_params) => {
   try {
     var search_params_result = exports.generate_profile_universal(query_params);
@@ -208,7 +210,7 @@ exports.updateResponseQuery = (user_list, auth, back_channel, query_params) => {
     slack_call.postMessageBack("Query failed", back_channel, auth);
   }
 };
-
+//2nd callback function for 'Update'
 exports.parseResponseUpdate2 = (res, back_channel, auth) => {
   var utf8_response = JSON.parse(res.getBody("utf-8"));
   let updateReturn = "[Update Successful]\n";
