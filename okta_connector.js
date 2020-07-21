@@ -81,43 +81,21 @@ exports.updateUser = (auth, params, back_channel) => {
 };
 
 exports.generate_profile_universal = (kvp_string, space_char) => {
-  var split_character = kvp_string.charAt(space_char);
-  console.log("KVP STRING IS: " + kvp_string);
-  let arr = kvp_string
-    .split(split_character)
-    .join(",")
-    .split(" ")
-    .join(",")
-    .split(",");
+  var arr=kvp_string.split(/\s+/)
   console.log("ARray is: " + arr);
   arr = exports.removeCommand(arr);
   return arr;
 };
 
 exports.generate_profile_query = kvp_string => {
-  var split_character = kvp_string.charAt(5);
-  console.log("KVP STRING IS: " + kvp_string);
-  let arr = kvp_string
-    .split(split_character)
-    .join(",")
-    .split(" ")
-    .join(",")
-    .split(",");
+  var arr=kvp_string.split(/\s+/)
   console.log("ARray is: " + arr);
   arr = exports.removeCommand(arr);
   return arr;
 };
 
 exports.generate_profile = kvp_string => {
-  //kvp_string.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-  var split_character = kvp_string.charAt(6);
-  console.log("KVP STRING IS: " + kvp_string);
-  let arr = kvp_string
-    .split(split_character)
-    .join(",")
-    .split(" ")
-    .join(",")
-    .split(",");
+  var arr=kvp_string.split(/\s+/)
   console.log("ARray is: " + arr);
   arr = exports.removeCommand(arr);
 
@@ -137,15 +115,7 @@ exports.generate_profile = kvp_string => {
 };
 
 exports.generate_profile_update = kvp_string => {
-  var split_character = kvp_string.charAt(6);
-  console.log("KVP STRING IS: " + kvp_string);
-  let arr = kvp_string
-    .split(split_character)
-    .join(",")
-    .split(" ")
-    .join(",")
-    .split(",");
-  console.log("ARray is: " + arr);
+  var arr=kvp_string.split(/\s+/)
   arr = exports.removeCommand(arr);
   var email = arr.shift();
   let table = arr.map(pair => pair.split("="));
