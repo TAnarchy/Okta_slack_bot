@@ -34,15 +34,15 @@ exports.getUsers =(auth,back_channel,extra,queryParams) =>{
     }).done((res)=>{
       if(extra=="list")
         {
-          exports.parseResponse(res,back_channel)
+          exports.parseResponse(res,back_channel,auth)
         }
       else if(extra=="query")
         {
-          exports.parseResponseQuery(res,back_channel,queryParams)
+          exports.parseResponseQuery(res,back_channel,queryParams,auth)
         }
       else if (extra=="update")
         {
-          exports.updateResponseQuery(res,auth,back_channel,queryParams)
+          exports.updateResponseQuery(res,auth,back_channel,queryParams,auth)
         }
     })
   } catch (e)
@@ -66,7 +66,7 @@ exports.createUser=(auth,params,back_channel) =>{
       json :{
         'profile':user_profile.profile
       }
-    }).done((res)=>{exports.parseResponseCreate(res,back_channel)})
+    }).done((res)=>{exports.parseResponseCreate(res,back_channel,auth)})
   } catch (e)
   {
     slack_call.postMessageTestWithText(e,back_channel)
@@ -136,23 +136,26 @@ exports.generate_profile_update=(kvp_string)=>{
   return {"result":result,"e_mail":email};
 }
 
-exports.parseResponse=(response,back_channel)=>
+exports.parseResponse=(response,back_channel,auth)=>
 {
   var utf8_response=JSON.parse(response.getBody("utf-8"))
   if (utf8_response.errorSummary!=undefined)
   {
-    slack_call.postMessageTestWithText("Error path 2",back_channel)
-    slack_call.postMessageTestWithText(utf8_response.errorSummary,back_channel)
+    
+    
+    slack_call.postMessageBack(returnValue,back_channel,auth)
+    slack_call.postMessageBack(utf8_response.errorSummary,back_channel,auth)
   }
   else
   {
     returnValue="";
     utf8_response.map(exports.parseUsers)
     //slack_call.postMessageTestWithText(returnValue,back_channel)
+    slack_call.postMessageBack(returnValue,back_channel,auth)
   }
 }
 
-exports.parseResponseCreate=(response,back_channel)=>
+exports.parseResponseCreate=(response,back_channel,auth)=>
 {
   try{
   console.log("definitely caught error"+JSON.stringify(response))
@@ -160,7 +163,8 @@ exports.parseResponseCreate=(response,back_channel)=>
   console.log("definitely caught error again"+JSON.stringify(utf8_response))
   if (utf8_response.errorSummary!=undefined)
   {
-    slack_call.postMessageTestWithText(utf8_response.errorSummary,back_channel)
+    //slack_call.postMessageTestWithText(utf8_response.errorSummary,back_channel)
+    slack_call.postMessageBack(utf8_response.errorSummary,back_channel,auth)
   }
   else
   {
@@ -173,14 +177,16 @@ exports.parseResponseCreate=(response,back_channel)=>
        
       }
     }
-    slack_call.postMessageTestWithText(createReturn,back_channel)
+    //slack_call.postMessageTestWithText(createReturn,back_channel)
+    slack_call.postMessageBack(createReturn,back_channel,auth)
   }
   }catch (e){
-    slack_call.postMessageTestWithText("Okta responded with an error, make sure values are correct and the user hasn't alreadybeen created",back_channel)
+   // slack_call.postMessageTestWithText("Okta responded with an error, make sure values are correct and the user hasn't alreadybeen created",back_channel)
+    slack_call.postMessageBack("Okta responded with an error, make sure values are correct and the user hasn't alreadybeen created",back_channel,auth)
   }
 }
 
-exports.parseResponseQuery =(user_list,back_channel,query_params)=>{
+exports.parseResponseQuery =(user_list,back_channel,query_params,auth)=>{
   try{
    // var search_params_array=exports.generate_profile_universal(query_params,first_space_position)
     var search_params_array=exports.generate_profile_query(query_params,first_space_position)
@@ -194,9 +200,11 @@ exports.parseResponseQuery =(user_list,back_channel,query_params)=>{
   var queried_user= user_list_body.filter(obj =>(obj.profile.email.includes(normalize_email.trim())))[0]
   var toReturnQuery=`Email: ${e_mail}\n`
   search_params_array.forEach(element=>toReturnQuery+=`${element}: ${queried_user.profile[element]}\n`)
-  slack_call.postMessageTestWithText(toReturnQuery,back_channel)
+  //slack_call.postMessageTestWithText(toReturnQuery,back_channel)
+    slack_call.postMessageBack(toReturnQuery,back_channel,auth)
   } catch(e){
-    slack_call.postMessageTestWithText("Query failed",back_channel)
+    //slack_call.postMessageTestWithText("Query failed",back_channel)
+    slack_call.postMessageBack("Query failed",back_channel,auth)
   }
 }
 
@@ -222,16 +230,19 @@ exports.updateResponseQuery =(user_list,auth,back_channel,query_params)=>{
       json :{
         'profile':queried_user.profile
       }
-    }).done((res)=>{exports.parseResponseUpdate2(res,back_channel)})
+    }).done((res)=>{exports.parseResponseUpdate2(res,back_channel,auth)})
     
-  slack_call.postMessageTestWithText("Update successful",back_channel)
+  //slack_call.postMessageTestWithText("Update successful",back_channel)
+    slack_call.postMessageBack("Update successful",back_channel,auth)
   } catch(e){
-    slack_call.postMessageTestWithText("Query failed",back_channel)
+    //slack_call.postMessageTestWithText("Query failed",back_channel)
+     slack_call.postMessageBack("Query failed",back_channel,auth)
   }
 }
 
-exports.parseResponseUpdate2=(res,back_channel)=>{
-  slack_call.postMessageTestWithText("At Update 2",back_channel)
+exports.parseResponseUpdate2=(res,back_channel,auth)=>{
+ // slack_call.postMessageTestWithText("At Update 2",back_channel)
+   slack_call.postMessageBack("At update 2",back_channel,auth)
   var utf8_response=JSON.parse(res.getBody("utf-8"))
   let updateReturn ='[Update Successful]\n'
     for (const property in utf8_response.profile) 
@@ -242,6 +253,7 @@ exports.parseResponseUpdate2=(res,back_channel)=>{
        
       }
     }
-    slack_call.postMessageTestWithText(updateReturn,back_channel)
+    //slack_call.postMessageTestWithText(updateReturn,back_channel)
+  slack_call.postMessageBack(updateReturn,back_channel,auth)
 }
 //
