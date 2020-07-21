@@ -124,7 +124,8 @@ exports.generate_profile = kvp_string => {
   /*arr.push("login="+arr[0])
   arr[0]="email="+arr[0]*/
   var email = arr.shift();
-  email=exports.delinkEmail(email)
+  console.log("PRELINK")
+  email=exports.deLinkEmail(email)
   console.log("Delnked email is: "+email)
   let table = arr.map(pair => pair.split("="));
   let result = {};
