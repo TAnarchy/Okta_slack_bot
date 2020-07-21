@@ -4,6 +4,9 @@ const okta_connect = require('./okta_connector')
 const helper = require('./helper');
 const bot_token=process.env.SLACK_BOT_TOKEN
 const http = require('http')
+const oktaTokenConst="oktaToken"
+const botTokenConst="botToken"
+const signedSecretConst="signedSecret"
 const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   token: process.env.SLACK_BOT_TOKEN
@@ -88,7 +91,12 @@ exports.processData = (input_data,back_channel) =>{
   if (command.trim() =="token")
     {
       var glToken={}
-      
+      glToken[oktaTokenConst]="SSWS "+value[0]
+      glToken[botTokenConst]=value[1]
+      glToken[signedSecretConst]=value[2]
+      console.log("Global token to be created is: "+JSON.stringify(glToken))
+      store.setGlobalToken(glToken)
+      console.log("Global token saved isis: "+JSON.stringify(store.getGlobalToken()))
       console.log("In token")
       value=value.split(",")
       store.setOktaToken("SSWS "+value[0])
@@ -99,7 +107,7 @@ exports.processData = (input_data,back_channel) =>{
   else if (command=="list")
     {
       console.log("Channel is: "+back_channel)
-      var userList = okta_connect.getUsers(store.getOktaToken(),back_channel,"list")
+      var userList = okta_connect.getUsers(store.getGlobalToken(),back_channel,"list")
     }
   else if (command=="create")
     {

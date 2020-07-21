@@ -61,10 +61,10 @@ exports.getSlackSecret=(token)=>{
   return slackSecret
 }
 
-exports.getGlobalToken=(token)=>{
+exports.setGlobalToken=(token)=>{
   globalToken=token
 }
 
-exports.setGlobalToken=(token)=>{
+exports.getGlobalToken=(token)=>{
   return globalToken
 }

@@ -8,6 +8,9 @@ const then_request=require('then-request')
 const slack_call = require('./slack_callback')
 const first_space_position=6
 const fitst_space_position_query=5
+const oktaTokenConst="oktaToken"
+const botTokenConst="botToken"
+const signedSecretConst="signedSecret"
 var returnValue="";
 
 
@@ -23,9 +26,10 @@ exports.parseUsers = (val) => {
 
 exports.getUsers =(auth,back_channel,extra,queryParams) =>{
   try{
+    console.log("Token to be passed: "+auth[oktaTokenConst])
     then_request("GET",okta_url+okta_path,{
       headers :{
-        'Authorization':auth
+        'Authorization':auth[oktaTokenConst]
       }
     }).done((res)=>{
       if(extra=="list")
