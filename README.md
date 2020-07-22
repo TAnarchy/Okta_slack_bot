@@ -14,10 +14,10 @@ Files:
 * index.js - Node.js [web sever](https://nodejs.org/en/docs/guides/getting-started-guide/)
 * okta_connector.js - Handles parsing and makings requests to [Okta](https://developer.okta.com/docs/reference/)
 * slack_callback.js - Handles [callbacks](https://slack.dev/bolt-js/concepts#web-api) to Slack 
-* store.js - maintains token global variables
+* store.js - Used to store session variables
 * jasmine_tests.js - Unit tests for parsers using [Jasmine](https://jasmine.github.io/) 
 
-Possible commands
+Slack chat my accept the following commands:
 
 token - sets up the appropriate tokens. example below.
 
