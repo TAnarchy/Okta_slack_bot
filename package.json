@@ -1,0 +1,23 @@
+{
+  "name": "Slack Okta Integration",
+  "version": "1.0.1",
+  "private": true,
+  "description": "Integrating Slack with Okta",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Artiom Fine",
+  "license": "MIT",
+  "dependencies": {
+    "@okta/okta-sdk-nodejs": "^4.0.0",
+    "@slack/bolt": "^1.5.0",
+    "jasmine": "^3.5.0",
+    "pegjs": "^0.10.0",
+    "query-string": "^6.13.1",
+    "space-separated-tokens": "^1.1.5",
+    "sync-request": "^6.1.0",
+    "then-request": "^6.0.2"
+  }
+}
